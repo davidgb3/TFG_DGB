@@ -28,7 +28,7 @@ const Login = () => {
       await login(username, password);
       setTimeout(() => {
         navigate('/', { replace: true });
-        // window.location.reload();
+        window.location.reload();
       }, 500);
     } catch (error) {
       console.error("Error durante el login:", error);

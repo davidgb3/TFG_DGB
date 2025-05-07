@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }) => {
     // Modificar el useEffect para evitar ciclos infinitos
     useEffect(() => {
         checkAuth();
-        console.log(user);
     }, [user]); // Remover user de las dependencias
     
     const login = async (username, password) => {

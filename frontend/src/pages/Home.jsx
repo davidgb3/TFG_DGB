@@ -3,12 +3,11 @@ import { useNote } from '../context/NoteContext';
 import { Box, Typography } from '@mui/material';
 import EditNoteModal from '../components/EditNoteModal';
 import NoteDetailsModal from '../components/NoteDetailsModal';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import DoneIcon from '@mui/icons-material/Done';
+import Note from '../components/Note';
+import CompletedNote from '../components/CompletedNote';
 
 const Home = () => {
-    const { notes, updateNoteState } = useNote();
+    const { notes, updateNoteState, getNotes } = useNote();
     const [selectedNote, setSelectedNote] = useState(null);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
@@ -32,84 +31,96 @@ const Home = () => {
     const handleToggleComplete = async (e, note) => {
         e.stopPropagation();
         try {
-            await updateNoteState(note._id, !note.isCompleted);
-            // Recargar las notas o actualizar el estado local
+            console.log('Sending update request for note:', note._id);
+            console.log('Current isCompleted value:', note.isCompleted);
+            
+            await updateNoteState(note._id, { isCompleted: true });
+            
+            getNotes();
+        } catch (error) {
+            console.error('Error al cambiar estado:', error);
+        }
+    };
+
+    const handleToggleNotComplete = async (e, note) => {
+        e.stopPropagation();
+        try {
+            console.log('Sending update request for note:', note._id);
+            console.log('Current isCompleted value:', note.isCompleted);
+            
+            await updateNoteState(note._id, { isCompleted: false });
+            
+            getNotes();
         } catch (error) {
             console.error('Error al cambiar estado:', error);
         }
     };
 
     return (
-        <div className='flex flex-col items-start justify-start w-full h-screen p-10'>
-            {notes.length > 0 ? (
-                <Box component='section'>
-                    {notes.map((note) => (
-                        <Box 
-                            component='div' 
-                            key={note._id}
-                            onClick={() => handleOpenView(note)}
-                            sx={{ 
-                                position: 'relative',
-                                display: 'flex', 
-                                flexDirection: 'column', 
-                                gap: 1, 
-                                padding: 2, 
-                                backgroundColor: 'primary.main', 
-                                borderRadius: '10px',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    transform: 'translateY(-5px)',
-                                    backgroundColor: 'primary.light'
-                                }
-                            }}
-                        >
-                            <Box sx={{ 
-                                position: 'absolute',
-                                top: '10px',
-                                right: '10px',
-                                display: 'flex',
-                                gap: 1
-                            }}>
-                                {!note.isCompleted && (
-                                    <DoneIcon 
-                                        onClick={(e) => handleToggleComplete(e, note)}
-                                        sx={{
-                                            color: 'text.primary',
-                                            transition: 'all 0.3s ease',
-                                            fontSize: '1.8rem',
-                                            '&:hover': {
-                                                color: 'accent',
-                                                transform: 'scale(1.1)'
-                                            }
-                                        }}
-                                    />
-                                )}
-                                <EditIcon 
-                                    onClick={(e) => handleOpenEdit(e, note)}
-                                    sx={{
-                                        color: 'text.primary',
-                                        transition: 'all 0.3s ease',
-                                        '&:hover': {
-                                            color: 'accent',
-                                            transform: 'scale(1.1)'
-                                        }
-                                    }}
-                                />
-                            </Box>
-                            <h2 className='text-4xl'>{note.title}</h2>
-                            <p>{note.content}</p>
-                            <span className='flex flex-row gap-1'>
-                                Due Date: 
-                                <Typography sx={{ color: 'accent', fontFamily:'Nothing' }}>
-                                    {new Date(note.dueDate).toLocaleDateString()}
-                                </Typography>
-                            </span>
-                        </Box>
-                    ))}
-                </Box>
-            ) : (
-                <div className="no-notes">No notes available</div>
+        <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
+            <Typography sx={{ 
+                fontFamily:'nothing',
+                fontSize: '4rem',
+                color: 'text.primary',
+                marginBottom: '20px',
+                textAlign: 'start',
+                borderBottom: '2px solid',
+                borderColor: 'accent',
+            }}>My Notes</Typography>
+            
+            <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'row', 
+                flexWrap: 'wrap',
+                gap: '20px', 
+                justifyContent: 'start', 
+                alignItems: 'start', 
+                width: '100%',
+                marginBottom: '40px'
+            }} component='section'> 
+                {notes.filter(note => !note.isCompleted).map((note) => (
+                    <Note
+                        key={note._id}
+                        note={note}
+                        onToggleComplete={handleToggleComplete}
+                        onEdit={handleOpenEdit}
+                        onView={handleOpenView}
+                    />
+                ))}
+            </Box>
+                    
+            {notes.filter(note => note.isCompleted).length > 0 && (
+                <>
+                    <Typography sx={{ 
+                        fontFamily:'nothing',
+                        fontSize: '4rem',
+                        color: 'text.primary',
+                        marginBottom: '20px',
+                        textAlign: 'start',
+                        borderBottom: '2px solid',
+                        borderColor: 'accent',
+                    }}>Completed Notes</Typography>
+                    
+                    <Box sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'row', 
+                        flexWrap: 'wrap',
+                        gap: '20px', 
+                        justifyContent: 'start', 
+                        alignItems: 'start', 
+                        width: '100%'
+                    }} component='section'>
+                        {notes.filter(note => note.isCompleted).map((note) => (
+                            <CompletedNote
+                                key={note._id}
+                                note={note}
+                                onRestore={handleToggleNotComplete}
+                                onEdit={handleOpenEdit}
+                                onView={handleOpenView}
+                            />
+                        ))}
+                    </Box>
+                </>
             )}
 
             {selectedNote && (

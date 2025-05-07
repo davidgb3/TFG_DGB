@@ -85,22 +85,29 @@ export const NoteProvider = ({children}) => {
 
     const updateNoteState = async (id, state) => {
         try {
+            console.log('Updating note state:', { id, state });
+            
             const response = await fetch(`${VITE_BASE_DB_URL}notes/updateState/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify({ state }),
+                body: JSON.stringify(state),
             });
-    
+
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Response data:', data);
+
             if (!response.ok) {
                 setError('Error updating note state');
                 return;
             }
-    
+
             getNotes(); // Recargar las notas después de actualizar
         } catch (error) {
+            console.error('Error in updateNoteState:', error);
             setError(error.message);
         }
     };

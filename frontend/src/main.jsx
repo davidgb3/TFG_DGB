@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { ThemeProvider } from '@emotion/react'
-import { theme } from './styles/theme.jsx'
+import { theme } from './styles/Theme.jsx'
 import { CssBaseline } from '@mui/material'
 import { NoteProvider } from './context/NoteContext.jsx'
 

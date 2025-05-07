@@ -32,8 +32,16 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
             <Typography sx={{ 
                 color: 'text.primary',
                 fontFamily: 'Nothing',
-                fontSize: '1.2rem',
-                whiteSpace: 'pre-wrap'
+                width: '100%',  // Cambiado de 100px a 100%
+                minHeight: 'fit-content',
+                display: 'flex',
+                flexWrap: 'wrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                // Limitamos a 3 líneas de texto
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                wordBreak: 'break-word'
             }}>
                 {note?.content}
             </Typography>
@@ -50,7 +58,11 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 }}>
                     Due Date: 
                     <span style={{ color: '#D71921', marginLeft: '8px' }}>
-                        {note?.dueDate && new Date(note.dueDate).toLocaleDateString()}
+                        {note?.dueDate && new Date(note.dueDate).toLocaleDateString('es-ES', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit'
+                                })}
                     </span>
                 </Typography>
 
@@ -60,7 +72,11 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 }}>
                     Reminder Date: 
                     <span style={{ color: '#D71921', marginLeft: '8px' }}>
-                        {note?.reminderDate && new Date(note.reminderDate).toLocaleDateString()}
+                        {note?.reminderDate && new Date(note.reminderDate).toLocaleDateString('es-ES', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit'
+                                })}
                     </span>
                 </Typography>
             </Box>
