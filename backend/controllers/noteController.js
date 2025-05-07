@@ -40,8 +40,6 @@ const updateNoteState = async (req, res) => {
     const { id } = req.params;
     const { isCompleted } = req.body;
     
-    console.log('Updating note:', { id, isCompleted });
-
     try {
         const updatedNote = await Note.findByIdAndUpdate(
             id,
@@ -50,18 +48,13 @@ const updateNoteState = async (req, res) => {
         );
 
         if (!updatedNote) {
-            console.log('Note not found');
             return res.status(404).json({ message: "Nota no encontrada" });
         }
 
-        console.log('Note updated successfully:', updatedNote);
         res.status(200).json(updatedNote);
     } catch (error) {
         console.error('Error updating note:', error);
-        res.status(500).json({ 
-            message: "Error al actualizar el estado de la nota",
-            error: error.message 
-        });
+        res.status(500).json({ message: "Error al actualizar el estado de la nota" });
     }
 };
 

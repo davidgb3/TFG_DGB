@@ -31,26 +31,7 @@ const Home = () => {
     const handleToggleComplete = async (e, note) => {
         e.stopPropagation();
         try {
-            console.log('Sending update request for note:', note._id);
-            console.log('Current isCompleted value:', note.isCompleted);
-            
-            await updateNoteState(note._id, { isCompleted: true });
-            
-            getNotes();
-        } catch (error) {
-            console.error('Error al cambiar estado:', error);
-        }
-    };
-
-    const handleToggleNotComplete = async (e, note) => {
-        e.stopPropagation();
-        try {
-            console.log('Sending update request for note:', note._id);
-            console.log('Current isCompleted value:', note.isCompleted);
-            
-            await updateNoteState(note._id, { isCompleted: false });
-            
-            getNotes();
+            await updateNoteState(note._id, { isCompleted: !note.isCompleted });
         } catch (error) {
             console.error('Error al cambiar estado:', error);
         }
@@ -99,7 +80,7 @@ const Home = () => {
                         textAlign: 'start',
                         borderBottom: '2px solid',
                         borderColor: 'accent',
-                    }}>Completed Notes</Typography>
+                    }}>Completed</Typography>
                     
                     <Box sx={{ 
                         display: 'flex', 
@@ -114,7 +95,7 @@ const Home = () => {
                             <CompletedNote
                                 key={note._id}
                                 note={note}
-                                onRestore={handleToggleNotComplete}
+                                onRestore={handleToggleComplete}
                                 onEdit={handleOpenEdit}
                                 onView={handleOpenView}
                             />
