@@ -105,8 +105,62 @@ export const NoteProvider = ({children}) => {
         }
     };
 
+    const setAsImportant = async (id, important) => {
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}notes/markAsImportant/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(important)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error updating note state');
+            }
+
+            await getNotes(); // Recargar las notas después de actualizar
+        } catch (error) {
+            console.error('Error in updateNoteState:', error);
+            setError(error.message);
+        }
+    };
+
+    const deleteNote = async (id) => {
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}notes/delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Error deleting note');
+            }
+
+            await getNotes(); // Recargar las notas después de eliminar
+        } catch (error) {
+            console.error('Error in deleteNote:', error);
+            setError(error.message);
+        }
+    };
+
     return (
-        <NoteContext.Provider value={{ newNote, notes, loading, error, setError, getNotes, updateNote, updateNoteState }}>
+        <NoteContext.Provider value={{ 
+            newNote, 
+            notes, 
+            loading, 
+            error, 
+            setError, 
+            getNotes, 
+            updateNote, 
+            updateNoteState,
+            setAsImportant,
+            deleteNote,
+        }}>
             {children}
         </NoteContext.Provider>
     )

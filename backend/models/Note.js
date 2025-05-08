@@ -16,6 +16,7 @@ const noteSchema = new mongoose.Schema({
         }
     }, // Default reminder is set to 1 day before the due date
     isCompleted: { type: Boolean, default: false },
+    important: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
 });
 

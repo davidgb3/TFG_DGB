@@ -9,7 +9,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
             component='div' 
             onClick={() => onView(note)}
             sx={{ 
-                width: '300px', 
+                width: 'auto', 
                 minWidth: '250px', 
                 maxWidth: '100%',
                 position: 'relative',
@@ -40,7 +40,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
                 alignItems: 'center',
                 width: 'fit-content',
                 height: 'fit-content',
-                gap: 1
+                gap: 1,
             }}>
                 <RestoreFromTrashIcon
                     onClick={(e) => onRestore(e, note)}
@@ -70,13 +70,15 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
                 sx={{ 
                     fontFamily: 'Nothing',
                     fontSize: '2.25rem',
-                    width: '100%',
+                    width: 'auto',
+                    maxWidth: 'calc(100% - 40px)', // Espacio para los iconos
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     wordBreak: 'break-word',
                     paddingRight: '50px',
-                    color: 'text.primary'
+                    color: 'text.primary',
+                    marginRight: '40px' // Espacio fijo para los iconos
                 }}
             >
                 {note.title}

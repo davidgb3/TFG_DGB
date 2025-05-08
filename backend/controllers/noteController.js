@@ -12,12 +12,50 @@ const createNote = async (req, res) => {
     }
 };
 
-const getNotesByUser = async (req, res) => {
-    const userId = req.userId; // Obtener el ID del usuario autenticado
+const deleteNote = async (req, res) => {
+    const { id } = req.params;
     try {
-        const notes = await Note.find({ userId });
-        res.status(200).json(notes);
+        const deletedNote = await Note.findByIdAndDelete(id);
+        if (!deletedNote) {
+            return res.status(404).json({ message: "Nota no encontrada" });
+        }
+        res.status(200).json({ message: "Nota eliminada" });
     } catch (error) {
+        res.status(500).json({ message: "Error al eliminar la nota" });
+    }
+}
+
+const getNotesByUser = async (req, res) => {
+    const userId = req.userId;
+    try {
+        // Obtener todas las notas del usuario
+        const notes = await Note.find({ userId });
+        
+        // Obtener la fecha actual (sin tiempo)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Verificar y actualizar notas vencidas
+        const updatedNotes = await Promise.all(notes.map(async (note) => {
+            if (note.dueDate && new Date(note.dueDate) < today && !note.isCompleted) {
+                // Actualizar la nota a completada si está vencida
+                return await Note.findByIdAndUpdate(
+                    note._id,
+                    { isCompleted: true },
+                    { new: true }
+                );
+            }
+            return note;
+        }));
+
+        // Ordenar por fecha de vencimiento
+        const sortedNotes = updatedNotes.sort((a, b) => 
+            new Date(a.dueDate) - new Date(b.dueDate)
+        );
+
+        res.status(200).json(sortedNotes);
+    } catch (error) {
+        console.error('Error getting notes:', error);
         res.status(500).json({ message: "Error al obtener las notas" });
     }
 };
@@ -58,4 +96,26 @@ const updateNoteState = async (req, res) => {
     }
 };
 
-export { createNote, getNotesByUser, updateNote, updateNoteState };
+const markAsImportant = async (req, res) => {
+    const { id } = req.params;
+    const { important } = req.body;
+
+    try {
+        const updatedNote = await Note.findByIdAndUpdate(
+            id,
+            { important },
+            { new: true }
+        );
+
+        if (!updatedNote) {
+            return res.status(404).json({ message: "Nota no encontrada" });
+        }
+
+        res.status(200).json(updatedNote);
+    } catch (error) {
+        console.error('Error updating note:', error);
+        res.status(500).json({ message: "Error al actualizar la nota" });
+    }
+};
+
+export { createNote, getNotesByUser, updateNote, updateNoteState, deleteNote, markAsImportant };

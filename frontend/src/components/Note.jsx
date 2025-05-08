@@ -2,16 +2,19 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
-const Note = ({ note, onToggleComplete, onEdit, onView }) => {
+const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => {
     return (
         <Box 
             component='div' 
             onClick={() => onView(note)}
             sx={{ 
-                width: '300px', 
+                width: 'auto', 
                 minWidth: '250px', 
-                maxWidth: '100%',
+                maxWidth: '1000px',
+                height: 'fit-content',
+                minHeight: 'fit-content',
                 position: 'relative',
                 display: 'flex', 
                 flexDirection: 'column', 
@@ -23,6 +26,8 @@ const Note = ({ note, onToggleComplete, onEdit, onView }) => {
                 borderRadius: '10px',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
+                border: note.important ? '2px solid' : 'none',
+                borderColor: note.important ? 'accent' : 'transparent',
                 '&:hover': {
                     transform: 'translateY(-5px)',
                     backgroundColor: 'primary.light',
@@ -66,19 +71,48 @@ const Note = ({ note, onToggleComplete, onEdit, onView }) => {
                         }
                     }}
                 />
+                {!note.important ? (
+                    <PriorityHighIcon 
+                        onClick={(e) => onMarkAsImportant(e, note)}
+                        sx={{
+                            color: 'text.primary',
+                            transition: 'all 0.3s ease',
+                            fontSize: '2rem',
+                            '&:hover': {
+                                color: 'accent',
+                                transform: 'scale(1.1)'
+                            }
+                        }}
+                    />
+                ) : (
+                    <PriorityHighIcon 
+                        onClick={(e) => onMarkAsImportant(e, note)}
+                        sx={{
+                            color: 'accent',
+                            transition: 'all 0.3s ease',
+                            fontSize: '2rem',
+                            '&:hover': {
+                                color: 'text.primary',
+                                transform: 'scale(1.1)'
+                            }
+                        }}
+                    />
+                )}
             </Box>
             <Typography 
                 variant="h2" 
                 sx={{ 
                     fontFamily: 'Nothing',
                     fontSize: '2.25rem',
-                    width: '100%',
+                    width: 'auto',
+                    maxWidth: 'calc(100% - 60px)', // Espacio para los iconos
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     wordBreak: 'break-word',
                     paddingRight: '50px',
-                    color: 'text.primary'
+                    color: 'text.primary',
+                    marginRight: '60px' // Espacio fijo para los iconos
                 }}
             >
                 {note.title}
@@ -88,12 +122,9 @@ const Note = ({ note, onToggleComplete, onEdit, onView }) => {
                     fontFamily: 'Nothing',
                     width: '100%',  
                     minHeight: 'fit-content',
-                    display: '-webkit-box',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    wordBreak: 'break-word'  
+                    wordBreak: 'break-word',
+                    whiteSpace: 'pre-line',  // Mantiene los saltos de línea
+                    color: 'text.primary'
                 }}
             >
                 {note.content}

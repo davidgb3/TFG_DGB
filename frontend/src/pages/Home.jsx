@@ -7,7 +7,7 @@ import Note from '../components/Note';
 import CompletedNote from '../components/CompletedNote';
 
 const Home = () => {
-    const { notes, updateNoteState, getNotes } = useNote();
+    const { notes, updateNoteState, getNotes, setAsImportant } = useNote();
     const [selectedNote, setSelectedNote] = useState(null);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
@@ -37,6 +37,15 @@ const Home = () => {
         }
     };
 
+    const handlemarkAsImportant = async (e, note) => {
+        e.stopPropagation();
+        try {
+            await setAsImportant(note._id, { important: !note.important });
+        } catch (error) {
+            console.error('Error al marcar como importante:', error);
+        }
+    }
+
     return (
         <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
             <Typography sx={{ 
@@ -59,15 +68,26 @@ const Home = () => {
                 width: '100%',
                 marginBottom: '40px'
             }} component='section'> 
-                {notes.filter(note => !note.isCompleted).map((note) => (
-                    <Note
-                        key={note._id}
-                        note={note}
-                        onToggleComplete={handleToggleComplete}
-                        onEdit={handleOpenEdit}
-                        onView={handleOpenView}
-                    />
-                ))}
+                {notes
+                    .filter(note => !note.isCompleted)
+                    .sort((a, b) => {
+                        // Ordenar primero por important (true primero)
+                        if (a.important && !b.important) return -1;
+                        if (!a.important && b.important) return 1;
+                        // Si tienen el mismo important, ordenar por fecha de creación
+                        return new Date(a.dueDate) - new Date(b.dueDate);
+                    })
+                    .map((note) => (
+                        <Note
+                            key={note._id}
+                            note={note}
+                            onToggleComplete={handleToggleComplete}
+                            onEdit={handleOpenEdit}
+                            onView={handleOpenView}
+                            onMarkAsImportant={handlemarkAsImportant}
+                        />
+                    ))
+                }
             </Box>
                     
             {notes.filter(note => note.isCompleted).length > 0 && (

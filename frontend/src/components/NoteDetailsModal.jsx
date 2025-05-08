@@ -41,7 +41,8 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 // Limitamos a 3 líneas de texto
                 WebkitLineClamp: 3,
                 WebkitBoxOrient: 'vertical',
-                wordBreak: 'break-word'
+                wordBreak: 'break-word',
+                whiteSpace: 'pre-line',  
             }}>
                 {note?.content}
             </Typography>
