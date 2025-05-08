@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
+import { verifyEmailConfig } from "./config/email.js";
+import setupEmailScheduler from "./cron/emailScheduler.js";
 
 const app = express();
 
@@ -35,10 +37,13 @@ app.use(cookieParser());
 
 // Conectar a MongoDB
 connectDB();
+await verifyEmailConfig(); // Verificar la configuración de correo
 
 // Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notes", noteRoutes); // Asegúrate de importar y usar las rutas de notas
+
+setupEmailScheduler(); // Configurar el programador de correos electrónicos
 
 export default app;

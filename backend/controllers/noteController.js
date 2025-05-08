@@ -1,13 +1,36 @@
 import Note from "../models/Note.js";
 
 const createNote = async (req, res) => {
-    const { title, content, dueDate } = req.body;
-    const userId = req.userId; // Obtener el ID del usuario autenticado
+    const { title, content, dueDate, reminderDate } = req.body;
+    const userId = req.userId;
+    
     try {
-        const newNote = new Note({ title, content, userId, dueDate });
+        // Ajustar dueDate a las 00:00 del día seleccionado
+        let adjustedDueDate = null;
+        if (dueDate) {
+            adjustedDueDate = new Date(dueDate);
+            adjustedDueDate.setHours(0, 0, 0, 0);
+        }
+
+        // Ajustar reminderDate a las 00:00
+        let adjustedReminderDate = null;
+        if (reminderDate) {
+            adjustedReminderDate = new Date(reminderDate);
+            adjustedReminderDate.setHours(0, 0, 0, 0);
+        }
+
+        const newNote = new Note({ 
+            title, 
+            content, 
+            userId, 
+            dueDate: adjustedDueDate,
+            ...(reminderDate && { reminderDate: adjustedReminderDate }) // Solo incluir si se proporciona
+        });
+
         await newNote.save();
         res.status(201).json(newNote);
     } catch (error) {
+        console.error('Error creating note:', error);
         res.status(500).json({ message: "Error al crear la nota" });
     }
 };
@@ -62,14 +85,40 @@ const getNotesByUser = async (req, res) => {
 
 const updateNote = async (req, res) => {
     const { id } = req.params;
-    const { title, content, dueDate } = req.body;
+    const { title, content, dueDate, reminderDate } = req.body;
+    
     try {
-        const updatedNote = await Note.findByIdAndUpdate(id, { title, content, dueDate }, { new: true });
+        // Ajustar dueDate a las 00:00
+        let adjustedDueDate = null;
+        if (dueDate) {
+            adjustedDueDate = new Date(dueDate);
+            adjustedDueDate.setHours(0, 0, 0, 0);
+        }
+
+        // Ajustar reminderDate a las 00:00
+        let adjustedReminderDate = null;
+        if (reminderDate) {
+            adjustedReminderDate = new Date(reminderDate);
+            adjustedReminderDate.setHours(0, 0, 0, 0);
+        }
+
+        const updatedNote = await Note.findByIdAndUpdate(
+            id, 
+            { 
+                title, 
+                content, 
+                dueDate: adjustedDueDate,
+                reminderDate: adjustedReminderDate 
+            }, 
+            { new: true }
+        );
+
         if (!updatedNote) {
             return res.status(404).json({ message: "Nota no encontrada" });
         }
         res.status(200).json(updatedNote);
     } catch (error) {
+        console.error('Error updating note:', error);
         res.status(500).json({ message: "Error al actualizar la nota" });
     }
 };
