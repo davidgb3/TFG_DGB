@@ -3,6 +3,9 @@ import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Button, Box } from '@mui/material';
 import NewNoteModal from './NewNoteModal';
+import Switch from '@mui/material/Switch';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 const NavBar = () => {
    const { isAuthenticated, logout } = useAuth();
@@ -34,7 +37,8 @@ const NavBar = () => {
     >
       {isAuthenticated ? (
         <div className='flex flex-row gap-2 justify-between items-center w-full'>
-          <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'flex-start', alignItems: 'center' }}>
+            <img width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
             <NewNoteModal/>
           </Box>
           <Box sx={{ 
@@ -66,8 +70,48 @@ const NavBar = () => {
           </Box>
         </div>
       ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-          
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <img width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
+          <Box>
+            <DarkModeIcon sx={{ color: 'white', fontSize: 30 }}/>
+            <Switch sx={{ 
+                '& .MuiSwitch-switchBase': {
+                    padding: 1,
+                    '&.Mui-checked': {
+                        '& + .MuiSwitch-track': {
+                            backgroundColor: 'accent',
+                            opacity: 1,
+                        },
+                        '& .MuiSwitch-thumb': {
+                            backgroundColor: 'text.primary',
+                        }
+                    }
+                },
+                '& .MuiSwitch-thumb': {
+                    backgroundColor: 'accent',
+                    width: 24,
+                    height: 24,
+                    '&:before': {
+                        content: "''",
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        left: 0,
+                        top: 0,
+                        backgroundImage: `url(${LightModeIcon})`,
+                        backgroundSize: '14px',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                    }
+                },
+                '& .MuiSwitch-track': {
+                    backgroundColor: 'primary.light',
+                    opacity: 1,
+                    borderRadius: 20,
+                }
+              }}/>
+              <LightModeIcon sx={{ color: 'white', fontSize: 30 }}/>
+            </Box>
         </Box>
       )}
     </Box>
