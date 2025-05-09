@@ -9,14 +9,15 @@ const createNote = async (req, res) => {
         let adjustedDueDate = null;
         if (dueDate) {
             adjustedDueDate = new Date(dueDate);
-            adjustedDueDate.setHours(0, 0, 0, 0);
+            adjustedDueDate.setHours(24, 0, 0, 0);
         }
 
         // Ajustar reminderDate a las 00:00
         let adjustedReminderDate = null;
         if (reminderDate) {
             adjustedReminderDate = new Date(reminderDate);
-            adjustedReminderDate.setHours(0, 0, 0, 0);
+            adjustedReminderDate.setHours(24
+, 0, 0, 0);
         }
 
         const newNote = new Note({ 

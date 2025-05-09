@@ -18,7 +18,7 @@ const sendEmail = async (note) => {
       subject: 'Recordatorio de fecha de vencimiento',
       html: `
         <h2>Hola ${user.username}</h2>
-        <p>Te recordamos que tienes una nota "${note.title}" con fecha límite para el: 
+        <p>Te recordamos que tienes una nota "<strong>${note.title}</strong>" con fecha límite para el: 
            <strong>${new Date(note.dueDate).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: '2-digit',
@@ -26,7 +26,7 @@ const sendEmail = async (note) => {
         })}</strong>
         </p>
         <p>Contenido de la nota:</p>
-        <p>${note.content}</p>
+        <p style="white-space: pre-line;">${note.content.replace(/\n/g, '<br>')}</p>
         <p>Este es un correo automático, por favor no responder.</p>
       `
     };
