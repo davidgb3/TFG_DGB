@@ -4,6 +4,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "../pages/Login";
 import Layout from "../layout/Layout";
 import Register from "../pages/Register";
+import UserProfile from "../pages/UserProfile";
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
                 path: '/register',
                 element: <Register />,
                 replace: true
+            },
+            {
+                path: '/userProfile',
+                element: <ProtectedRoute><UserProfile /></ProtectedRoute>,
             }
         ]
     }

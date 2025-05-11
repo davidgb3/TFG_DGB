@@ -7,15 +7,18 @@ import { ThemeProvider } from '@emotion/react'
 import { theme } from './styles/Theme.jsx'
 import { CssBaseline } from '@mui/material'
 import { NoteProvider } from './context/NoteContext.jsx'
+import { UserProvider } from './context/UserContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <NoteProvider>
-          <CssBaseline />
-          <App />
-        </NoteProvider>
+        <UserProvider>
+          <NoteProvider>
+            <CssBaseline />
+            <App />
+          </NoteProvider>
+        </UserProvider>
       </AuthProvider>
     </ThemeProvider>
   </StrictMode>,

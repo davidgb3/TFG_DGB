@@ -19,6 +19,14 @@ const NavBar = () => {
         navigate('/login'); 
    }
 
+   const handleProfile = () => {
+        navigate('/userProfile');
+   }
+
+   const handleHome = () => {
+        navigate('/');
+   }
+
   return (
     <Box
       component="nav" 
@@ -38,7 +46,7 @@ const NavBar = () => {
       {isAuthenticated ? (
         <div className='flex flex-row gap-2 justify-between items-center w-full'>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'flex-start', alignItems: 'center' }}>
-            <img width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
+            <img onClick={handleHome} className='cursor-pointer' width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
             <NewNoteModal/>
           </Box>
           <Box sx={{ 
@@ -47,7 +55,8 @@ const NavBar = () => {
             alignItems: 'center',
             gap: 2
           }}>
-            <Avatar sx={{ bgcolor: 'white', color: 'primary.main', fontFamily: 'Nothing' }}>{userPfp}</Avatar>
+            <Avatar onClick={ handleProfile } sx={{ bgcolor: 'white', color: 'primary.main', fontFamily: 'Nothing', cursor: 'pointer', 
+              '&:hover': {filter: 'opacity(75%)'}, transition: 'all 0.3s ease-in-out'  }}>{userPfp}</Avatar>
             <Button 
               onClick={handleLogout} 
               variant='contained' 
@@ -71,7 +80,7 @@ const NavBar = () => {
         </div>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          <img width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
+          <img onClick={handleHome} className='cursor-pointer' width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
           <Box>
             <DarkModeIcon sx={{ color: 'white', fontSize: 30 }}/>
             <Switch sx={{ 

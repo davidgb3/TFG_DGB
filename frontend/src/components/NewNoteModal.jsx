@@ -132,11 +132,11 @@ const NewNoteModal = () => {
                             textField: {
                                 required: true,
                             }
-                          }} sx={{ width: "100%" }}/>
+                          }} minDate={new Date()} sx={{ width: "100%" }}/>
                         </LocalizationProvider>
 
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <DesktopDatePicker value={formData.reminderDate} onChange={handleReminderDateChange} id="reminderDate" name="reminderDate" label="Reminder Date *" sx={{ width: "100%" }}/>
+                          <DesktopDatePicker value={formData.reminderDate} onChange={handleReminderDateChange} id="reminderDate" name="reminderDate" label="Reminder Date *" minDate={new Date()} sx={{ width: "100%" }}/>
                         </LocalizationProvider>
                     </Box>
                   
