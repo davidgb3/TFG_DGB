@@ -58,6 +58,27 @@ const register = async (req, res) => {
   res.status(201).json({ message: "Usuario registrado" });
 };
 
+const editProfile = async (req, res) => {
+  const { username, email, password } = req.body;
+  const userId = req.params.id;
+
+  // Verificar si el usuario existe
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  // Actualizar los datos del usuario
+  user.username = username || user.username;
+  user.email = email || user.email;
+  if (password) {
+    user.password = password; // Aquí deberías hashear la contraseña antes de guardar
+  }
+  await user.save();
+
+  res.json({ message: "Perfil actualizado", user });
+};
+
 const logout = (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
@@ -68,4 +89,4 @@ const logout = (req, res) => {
 };
 
 // Exportar las funciones
-export { login, logout, register };
+export { login, logout, register, editProfile };

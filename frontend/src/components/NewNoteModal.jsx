@@ -54,8 +54,25 @@ const NewNoteModal = () => {
 
   return (
     <>
-        <NoteAddIcon onClick={handleOpen} sx={{ cursor: 'pointer', transition: 'all 0.5s', '&:hover': { color: 'accent' } }} />
-
+        <Button 
+          onClick={handleOpen} 
+          variant='contained' 
+          color="text.main"
+          sx={{
+            backgroundColor: 'crimson',
+            fontFamily: 'Nothing',
+            borderRadius: '50px 10px 10px 50px',
+            padding: '9px',
+            color: 'text.main',
+            '&:hover': {
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: 'darkred'
+            }
+          }}
+        >
+          New Note
+        </Button>
         <Modal open={open} onClose={handleClose}>
             <Box sx={{ width: '50%', height: 'fit-content', backgroundColor: 'primary.main', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: 2, gap: 2 }}>
                 <h1 className='underline decoration-dotted' style={{ fontFamily: 'Nothing', color: 'white', fontSize: '4rem', fontWeight: 'bold' }}>New Note**</h1>

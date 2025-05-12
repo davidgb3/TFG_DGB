@@ -55,7 +55,7 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
             }}>
                 <Typography sx={{ 
                     color: 'text.primary',
-                    fontFamily: 'Nothing'
+                    fontFamily: 'Nothing',
                 }}>
                     Due Date: 
                     <span style={{ color: '#D71921', marginLeft: '8px' }}>

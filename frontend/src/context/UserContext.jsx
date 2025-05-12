@@ -1,4 +1,3 @@
-import { set } from "mongoose";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
@@ -35,9 +34,52 @@ export const UserProvider = ({ children }) => {
             setLoading(true);
         }
     };
+
+    const editUserData = async (userId, userData) => {
+        const { username, email, password } = userData;
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}auth/editProfile/${userId}`, {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+            if (!response.ok) {
+                setError("Error updating user data");
+                return;
+            }
+            const data = await response.json();
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(true);
+        }
+    };
+
+    const notifyUser = async (userId) => {
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}users/${userId}/sendEmail`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                setError("Error sending email");
+                return;
+            }
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(true);
+        }
+    };
     
     return (
-        <UserContext.Provider value={{ userData, error, loading }}>
+        <UserContext.Provider value={{ userData, error, loading, editUserData, notifyUser }}>
         {children}
         </UserContext.Provider>
     );

@@ -1,5 +1,5 @@
 import express from "express";
-import { login, logout, register } from "../controllers/authController.js";
+import { login, logout, register, editProfile } from "../controllers/authController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import User from "../models/User.js";
 
@@ -8,6 +8,7 @@ const router = express.Router();
 // Rutas de autenticación
 router.post("/login", login);
 router.post("/register", register);
+router.put("/editProfile/:id", authMiddleware, editProfile)
 router.post("/logout", logout);
 
 router.get("/check-auth", authMiddleware, async (req, res) => {
