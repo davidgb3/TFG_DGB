@@ -5,27 +5,17 @@ const createNote = async (req, res) => {
     const userId = req.userId;
     
     try {
-        // Ajustar dueDate a las 00:00 del día seleccionado
-        let adjustedDueDate = null;
-        if (dueDate) {
-            adjustedDueDate = new Date(dueDate);
-            adjustedDueDate.setHours(24, 0, 0, 0);
-        }
-
-        // Ajustar reminderDate a las 00:00
-        let adjustedReminderDate = null;
-        if (reminderDate) {
-            adjustedReminderDate = new Date(reminderDate);
-            adjustedReminderDate.setHours(24
-, 0, 0, 0);
-        }
+        // Ajustar a CEST (UTC+2)
+        const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
+        let adjustedDueDate = dueDate ? new Date(new Date(dueDate).getTime() + cestOffset) : null;
+        let adjustedReminderDate = reminderDate ? new Date(new Date(reminderDate).getTime() + cestOffset) : null;
 
         const newNote = new Note({ 
             title, 
             content, 
             userId, 
             dueDate: adjustedDueDate,
-            ...(reminderDate && { reminderDate: adjustedReminderDate }) // Solo incluir si se proporciona
+            ...(reminderDate && { reminderDate: adjustedReminderDate })
         });
 
         await newNote.save();
@@ -55,9 +45,9 @@ const getNotesByUser = async (req, res) => {
         // Obtener todas las notas del usuario
         const notes = await Note.find({ userId });
         
-        // Obtener la fecha actual (sin tiempo)
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        // Obtener la fecha actual en CEST
+        const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
+        const today = new Date(new Date().getTime() + cestOffset);
 
         // Verificar y actualizar notas vencidas
         const updatedNotes = await Promise.all(notes.map(async (note) => {
@@ -89,19 +79,10 @@ const updateNote = async (req, res) => {
     const { title, content, dueDate, reminderDate } = req.body;
     
     try {
-        // Ajustar dueDate a las 00:00
-        let adjustedDueDate = null;
-        if (dueDate) {
-            adjustedDueDate = new Date(dueDate);
-            adjustedDueDate.setHours(0, 0, 0, 0);
-        }
-
-        // Ajustar reminderDate a las 00:00
-        let adjustedReminderDate = null;
-        if (reminderDate) {
-            adjustedReminderDate = new Date(reminderDate);
-            adjustedReminderDate.setHours(0, 0, 0, 0);
-        }
+        // Ajustar a CEST (UTC+2)
+        const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
+        let adjustedDueDate = dueDate ? new Date(new Date(dueDate).getTime()) : null;
+        let adjustedReminderDate = reminderDate ? new Date(new Date(reminderDate).getTime()) : null;
 
         const updatedNote = await Note.findByIdAndUpdate(
             id, 
@@ -119,7 +100,6 @@ const updateNote = async (req, res) => {
         }
         res.status(200).json(updatedNote);
     } catch (error) {
-        console.error('Error updating note:', error);
         res.status(500).json({ message: "Error al actualizar la nota" });
     }
 };

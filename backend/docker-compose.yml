@@ -33,6 +33,9 @@ services:
     environment:
       - MONGODB_URI=mongodb://root:example@mongo:27017/auth_db?authSource=admin
       - JWT_SECRET=tu_clave_secreta
+    volumes:
+      - .:/app  # Monta el directorio actual en /app
+      - /app/node_modules  # Evita que node_modules local sobrescriba el del contenedor
     depends_on:
       - mongo
 

@@ -135,7 +135,9 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
                     {new Date(note.dueDate).toLocaleDateString('es-ES', {
                         year: 'numeric',
                         month: '2-digit',
-                        day: '2-digit'
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
                     })}
                 </Typography>
             </span>

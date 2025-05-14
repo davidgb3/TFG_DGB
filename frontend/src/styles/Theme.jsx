@@ -84,6 +84,53 @@ export const theme = createTheme({
             border: `2px solid grey`,
           }
         }
+      },
+      MuiClock: {
+        styleOverrides: {
+          root: {
+            backgroundColor: textColor,
+            borderRadius: '10px',
+            border: `2px solid ${accentColor}`,
+          },
+          clock: {
+            backgroundColor: textColor,
+            '& .MuiClockPointer-root': {
+              backgroundColor: accentColor,
+            },
+            '& .MuiClockPointer-thumb': {
+              backgroundColor: accentColor,
+              borderColor: accentColor,
+            },
+          },
+          pin: {
+            backgroundColor: accentColor,
+          }
+        }
+      },
+      MuiClockNumber: {
+        styleOverrides: {
+          root: {
+            fontFamily: 'Nothing',
+            color: primaryMain,
+            '&.Mui-selected': {
+              color: textColor,
+              backgroundColor: accentColor,
+            }
+          }
+        }
+      },
+      MuiTimeClock: {
+        styleOverrides: {
+          root: {
+            backgroundColor: textColor,
+            '& .MuiClock-pin': {
+              backgroundColor: accentColor,
+            },
+            '& .MuiClockPointer-root': {
+              backgroundColor: accentColor,
+            }
+          }
+        }
       }
     }
 });

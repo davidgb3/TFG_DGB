@@ -1,11 +1,11 @@
 import { Box, Button, Modal, TextareaAutosize, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import { useState } from 'react'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import { es } from 'date-fns/locale';
 import { useNote } from '../context/NoteContext';
 
 const NewNoteModal = () => {
@@ -17,8 +17,8 @@ const NewNoteModal = () => {
     const [formData, setFormData] = useState({
         title: "",
         content: "",
-        dueDate: null,
-        reminderDate: null,
+        dueDate: [null, null],
+        reminderDate: [null, null],
       })
 
     const handleChange = (e) => {
@@ -144,16 +144,48 @@ const NewNoteModal = () => {
                     </Box>
 
                     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width:"45%", height:"100%" }} >
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <DesktopDatePicker required defaultValue={new Date()} value={formData.dueDate} onChange={handleDateChange} id="dueDate" name="dueDate" label="Due Date" slotProps={{
-                            textField: {
+                        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                          <DateTimePicker 
+                            required 
+                            views={['day', 'hours', 'minutes']} 
+                            defaultValue={new Date()} 
+                            value={formData.dueDate} 
+                            onChange={handleDateChange} 
+                            id="dueDate" 
+                            name="dueDate" 
+                            label="Due Date"
+                            format="dd/MM/yyyy HH:mm"
+                            slotProps={{
+                              textField: {
                                 required: true,
-                            }
-                          }} minDate={new Date()} sx={{ width: "100%" }}/>
+                              }
+                            }} 
+                            minDate={new Date()} 
+                            sx={{ width: "100%" }}
+                            viewRenderers={{
+                              hours: renderTimeViewClock,
+                              minutes: renderTimeViewClock,
+                            }}
+                          />
                         </LocalizationProvider>
 
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <DesktopDatePicker value={formData.reminderDate} onChange={handleReminderDateChange} id="reminderDate" name="reminderDate" label="Reminder Date *" minDate={new Date()} sx={{ width: "100%" }}/>
+                        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                          <DateTimePicker 
+                            views={['day', 'hours', 'minutes']} 
+                            defaultValue={new Date()} 
+                            value={formData.reminderDate} 
+                            onChange={handleReminderDateChange} 
+                            id="reminderDate" 
+                            name="reminderDate" 
+                            label="Reminder Date"
+                            format="dd/MM/yyyy HH:mm"
+                            minDate={new Date()} 
+                            sx={{ width: "100%" }}
+                            viewRenderers={{
+                              hours: renderTimeViewClock,
+                              minutes: renderTimeViewClock,
+                            }}
+                          />
                         </LocalizationProvider>
                     </Box>
                   
