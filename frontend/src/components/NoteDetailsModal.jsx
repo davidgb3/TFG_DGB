@@ -1,5 +1,6 @@
 import { Box, Button, Modal, Typography } from '@mui/material'
 import React from 'react'
+import { formatDateInCEST } from '../helpers/HourRenderFix.jsx';
 
 const NoteDetailsModal = ({ note, open, handleClose }) => {
   return (
@@ -59,12 +60,13 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 }}>
                     Due Date: 
                     <span style={{ color: '#D71921', marginLeft: '8px' }}>
-                        {note?.dueDate && new Date(note.dueDate).toLocaleDateString('es-ES', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
+                        {new Date(note.dueDate).toLocaleString('es-ES', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'Europe/Madrid',
                         })}
                     </span>
                 </Typography>
@@ -75,12 +77,13 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 }}>
                     Reminder Date: 
                     <span style={{ color: '#D71921', marginLeft: '8px' }}>
-                        {note?.reminderDate && new Date(note.reminderDate).toLocaleDateString('es-ES', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
+                        {new Date(note.reminderDate).toLocaleString('es-ES', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'Europe/Madrid',
                         })}
                     </span>
                 </Typography>

@@ -36,11 +36,12 @@ const NewNoteModal = () => {
 
     const handleSubmit = (e) => {
       e.preventDefault();
+
       newNote(formData);
       if(!error){
         setTimeout(() => {
           handleClose();
-          window.location.reload();
+          // window.location.reload();
         }, 500);
       }
     };
@@ -49,7 +50,8 @@ const NewNoteModal = () => {
     const isFormValid = () => {
         return formData.title && 
                formData.content && 
-               formData.dueDate; // Añadimos dueDate a la validación
+               formData.dueDate &&
+               formData.reminderDate; 
     };
 
   return (
@@ -171,6 +173,7 @@ const NewNoteModal = () => {
 
                         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                           <DateTimePicker 
+                            required
                             views={['day', 'hours', 'minutes']} 
                             defaultValue={new Date()} 
                             value={formData.reminderDate} 
@@ -179,6 +182,11 @@ const NewNoteModal = () => {
                             name="reminderDate" 
                             label="Reminder Date"
                             format="dd/MM/yyyy HH:mm"
+                            slotProps={{
+                              textField: {
+                                required: true,
+                              }
+                            }} 
                             minDate={new Date()} 
                             sx={{ width: "100%" }}
                             viewRenderers={{

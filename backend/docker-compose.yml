@@ -1,18 +1,20 @@
 services:
   # Servicio para MongoDB
   mongo:
-    image: mongo:8.0
+    image: mongo:latest
     container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db # Montar un volumen en /data/db
+      - ./config/mongo_init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    command: mongod --auth
   # Servicio para Mongo Express
   mongo-express:
-    image: mongo-express:1.0
+    image: mongo-express:latest
     container_name: mongo-express
     ports:
       - "8081:8081"
@@ -31,13 +33,15 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URI=mongodb://root:example@mongo:27017/auth_db?authSource=admin
+      - MONGODB_URI=mongodb://root:example@mongo:27017/TFG_DGB?authSource=admin
       - JWT_SECRET=tu_clave_secreta
     volumes:
       - .:/app  # Monta el directorio actual en /app
       - /app/node_modules  # Evita que node_modules local sobrescriba el del contenedor
     depends_on:
       - mongo
+    command: npm run dev
+    restart: unless-stopped
 
   # Servicio para Nginx
   nginx:

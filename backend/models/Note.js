@@ -7,14 +7,9 @@ const noteSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: Date.now },
     dueDate: { type: Date },
     reminderDate: { 
-        type: Date, 
-        default: function() {
-            if (this.dueDate) {
-                return new Date(this.dueDate.getTime() - 24 * 60 * 60 * 1000);
-            }
-            return null;
-        }
-    }, // Default reminder is set to 1 day before the due date
+        type: Date,
+        default: null
+    },
     isCompleted: { type: Boolean, default: false },
     important: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},

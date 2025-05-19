@@ -1,5 +1,5 @@
 # Usar una imagen base de Node.js 22
-FROM node:20
+FROM node:22
 
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
@@ -8,6 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar las dependencias
+RUN npm install -g nodemon
 RUN npm install
 
 # Copiar el resto de los archivos del backend

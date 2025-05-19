@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
+import { formatDateInCEST } from '../helpers/HourRenderFix.jsx';
 
 const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
     return (
@@ -101,12 +102,13 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
             <span className='flex flex-row gap-1'>
                 Due Date: 
                 <Typography sx={{ color: 'accent', fontFamily:'Nothing' }}>
-                    {new Date(note.dueDate).toLocaleDateString('es-ES', {
+                    {new Date(note.dueDate).toLocaleString('es-ES', {
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
                         hour: '2-digit',
                         minute: '2-digit',
+                        timeZone: 'Europe/Madrid',
                     })}
                 </Typography>
             </span>

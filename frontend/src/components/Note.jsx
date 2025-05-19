@@ -132,12 +132,13 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
             <span className='flex flex-row gap-1'>
                 Due Date: 
                 <Typography sx={{ color: 'accent', fontFamily:'Nothing' }}>
-                    {new Date(note.dueDate).toLocaleDateString('es-ES', {
+                    {new Date(note.dueDate).toLocaleString('es-ES', {
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
                         hour: '2-digit',
                         minute: '2-digit',
+                        timeZone: 'Europe/Madrid',
                     })}
                 </Typography>
             </span>

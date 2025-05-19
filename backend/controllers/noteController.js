@@ -5,17 +5,12 @@ const createNote = async (req, res) => {
     const userId = req.userId;
     
     try {
-        // Ajustar a CEST (UTC+2)
-        const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
-        let adjustedDueDate = dueDate ? new Date(new Date(dueDate).getTime() + cestOffset) : null;
-        let adjustedReminderDate = reminderDate ? new Date(new Date(reminderDate).getTime() + cestOffset) : null;
-
         const newNote = new Note({ 
             title, 
             content, 
             userId, 
-            dueDate: adjustedDueDate,
-            ...(reminderDate && { reminderDate: adjustedReminderDate })
+            dueDate: dueDate ? new Date(dueDate) : null,
+            reminderDate: reminderDate ? new Date(reminderDate) : null
         });
 
         await newNote.save();
@@ -42,27 +37,35 @@ const deleteNote = async (req, res) => {
 const getNotesByUser = async (req, res) => {
     const userId = req.userId;
     try {
-        // Obtener todas las notas del usuario
         const notes = await Note.find({ userId });
-        
-        // Obtener la fecha actual en CEST
-        const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
-        const today = new Date(new Date().getTime() + cestOffset);
+        const now = new Date();
 
-        // Verificar y actualizar notas vencidas
         const updatedNotes = await Promise.all(notes.map(async (note) => {
-            if (note.dueDate && new Date(note.dueDate) < today && !note.isCompleted) {
-                // Actualizar la nota a completada si está vencida
-                return await Note.findByIdAndUpdate(
-                    note._id,
-                    { isCompleted: true },
-                    { new: true }
-                );
+            if (note.dueDate && !note.isCompleted) {
+                const dueDate = new Date(note.dueDate);
+                
+                // Comparar año, mes, día, hora y minutos
+                const isSameDateTime = 
+                    dueDate.getFullYear() === now.getFullYear() &&
+                    dueDate.getMonth() === now.getMonth() &&
+                    dueDate.getDate() === now.getDate() &&
+                    dueDate.getHours() === now.getHours() &&
+                    dueDate.getMinutes() === now.getMinutes();
+
+                if (isSameDateTime) {
+                    return await Note.findByIdAndUpdate(
+                        note._id,
+                        { 
+                            isCompleted: true,
+                            important: true 
+                        },
+                        { new: true }
+                    );
+                }
             }
             return note;
         }));
 
-        // Ordenar por fecha de vencimiento
         const sortedNotes = updatedNotes.sort((a, b) => 
             new Date(a.dueDate) - new Date(b.dueDate)
         );
@@ -79,18 +82,14 @@ const updateNote = async (req, res) => {
     const { title, content, dueDate, reminderDate } = req.body;
     
     try {
-        // Ajustar a CEST (UTC+2)
-        const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
-        let adjustedDueDate = dueDate ? new Date(new Date(dueDate).getTime()) : null;
-        let adjustedReminderDate = reminderDate ? new Date(new Date(reminderDate).getTime()) : null;
-
+        // Eliminamos el ajuste CEST aquí ya que el modelo ya lo maneja
         const updatedNote = await Note.findByIdAndUpdate(
             id, 
             { 
                 title, 
                 content, 
-                dueDate: adjustedDueDate,
-                reminderDate: adjustedReminderDate 
+                dueDate: dueDate ? new Date(dueDate) : null,
+                reminderDate: reminderDate ? new Date(reminderDate) : null
             }, 
             { new: true }
         );

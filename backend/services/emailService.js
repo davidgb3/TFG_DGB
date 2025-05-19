@@ -17,12 +17,12 @@ const sendEmail = async (note) => {
       html: `
         <h2>Hola ${user.username}</h2>
         <p>Te recordamos que tienes una nota "<strong>${note.title}</strong>" con fecha límite para el: 
-           <strong>${new Date(note.dueDate).toLocaleString('es-ES', {
+           <strong>${new Date(new Date(note.dueDate).getTime() + 2 * 60 * 60 * 1000).toLocaleString('es-ES', {
              year: 'numeric',
              month: '2-digit',
              day: '2-digit',
              hour: '2-digit',
-             minute: '2-digit'
+             minute: '2-digit',
            })}</strong>
         </p>
         <p>Contenido de la nota:</p>
@@ -42,31 +42,27 @@ const sendEmail = async (note) => {
 
 const checkDueDates = async () => {
   try {
-    // Ajustar a CEST (UTC+2)
-    const cestOffset = 2 * 60 * 60 * 1000; // 2 horas en milisegundos
     const now = new Date();
-    const nowCEST = new Date(now.getTime() + cestOffset);
+    const startMinute = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(), // Ajuste para CEST
+      now.getMinutes()
+    );
+    
+    const endMinute = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      now.getHours(), // Ajuste para CEST
+      now.getMinutes() + 1
+    );
 
-    console.log('Hora actual CEST:', nowCEST);
-
-    // Buscar notas con reminderDate que coincida con la hora actual
     const notes = await Note.find({
       reminderDate: {
-        // Comparar año, mes, día, hora y minuto
-        $gte: new Date(
-          nowCEST.getFullYear(),
-          nowCEST.getMonth(),
-          nowCEST.getDate(),
-          nowCEST.getHours(),
-          nowCEST.getMinutes()
-        ),
-        $lt: new Date(
-          nowCEST.getFullYear(),
-          nowCEST.getMonth(),
-          nowCEST.getDate(),
-          nowCEST.getHours(),
-          nowCEST.getMinutes() + 1
-        )
+        $gte: startMinute,
+        $lt: endMinute
       },
       notificationSent: { $ne: true },
       isCompleted: false
@@ -80,13 +76,12 @@ const checkDueDates = async () => {
         id: note._id,
         title: note.title,
         reminderDate: note.reminderDate,
-        horaActual: nowCEST
+        horaActual: now
       });
       
       const success = await sendEmail(note);
       if (success) {
         notificationsSent++;
-        // Marcar la notificación como enviada
         await Note.findByIdAndUpdate(note._id, { notificationSent: true });
       }
     }

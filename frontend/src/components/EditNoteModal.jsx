@@ -18,7 +18,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
         title: note?.title || "",
         content: note?.content || "",
         dueDate: note?.dueDate ? new Date(note.dueDate) : null,
-        reminderDate: note?.reminderDate ? new Date(note.reminderDate) : null,
+        reminderDate: note?.reminderDate ? new Date(note.reminderDate) : null
     });
 
     const handleChange = (e) => {
@@ -36,7 +36,8 @@ const EditNoteModal = ({ note, open, handleClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await updateNote(note._id, formData);
+
+        updateNote(note._id, formData);
         if(!error){
             setTimeout(() => {
                 handleClose();
@@ -152,6 +153,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                               hours: renderTimeViewClock,
                               minutes: renderTimeViewClock,
                             }}
+                            timezone="Europe/Madrid"
                           />
                         </LocalizationProvider>
 
@@ -171,6 +173,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                               hours: renderTimeViewClock,
                               minutes: renderTimeViewClock,
                             }}
+                            timezone="Europe/Madrid"
                           />
                         </LocalizationProvider>
                     </Box>
