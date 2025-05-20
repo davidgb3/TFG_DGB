@@ -7,7 +7,10 @@ import EditProfileModal from '../components/EditProfileModal';
 const UserProfile = () => {
     const { userData } = useUser();
     const { user } = useAuth();
-    const userPfp = user ? user.charAt(0).toUpperCase() : '?';
+
+    const username = user ? user.user : 'Guest';
+    const userPfp = username ? username.charAt(0).toUpperCase() : '?';
+    
     const [openEditModal, setOpenEditModal] = useState(false);
 
     const handleOpenEdit = () => {

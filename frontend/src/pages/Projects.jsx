@@ -2,11 +2,18 @@ import { Box, Typography } from "@mui/material";
 import NewProjectModal from "../components/NewProjectModal";
 import { useProject } from "../context/ProjectContext";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Projects = () => {
 
     const { projects } = useProject();
     const { user } = useAuth();
+    
+    const navigate = useNavigate();
+
+    const handleProjectNotes = (projectId) => {
+        navigate(`/project/${projectId}`);	
+    };
 
     return (
         <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
@@ -22,6 +29,7 @@ const Projects = () => {
             <Box >
                 {projects?.map((project) => (
                     <Box 
+                        onClick={() => handleProjectNotes(project._id)}
                         key={project._id}
                         component='div' 
                         sx={{ 

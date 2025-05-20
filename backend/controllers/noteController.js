@@ -1,7 +1,8 @@
 import Note from "../models/Note.js";
+import Project from "../models/Project.js";
 
 const createNote = async (req, res) => {
-    const { title, content, dueDate, reminderDate } = req.body;
+    const { title, content, dueDate, reminderDate, projectId } = req.body;
     const userId = req.userId;
     
     try {
@@ -9,11 +10,22 @@ const createNote = async (req, res) => {
             title, 
             content, 
             userId, 
+            projectId,
             dueDate: dueDate ? new Date(dueDate) : null,
             reminderDate: reminderDate ? new Date(reminderDate) : null
         });
 
         await newNote.save();
+
+        // Si hay projectId, actualizar el array de notas del proyecto
+        if (projectId) {
+            await Project.findByIdAndUpdate(
+                projectId,
+                { $push: { notes: newNote._id } },
+                { new: true }
+            );
+        }
+
         res.status(201).json(newNote);
     } catch (error) {
         console.error('Error creating note:', error);

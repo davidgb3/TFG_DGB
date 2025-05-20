@@ -19,6 +19,7 @@ const NewNoteModal = () => {
         content: "",
         dueDate: [null, null],
         reminderDate: [null, null],
+        projectId: null,
       })
 
     const handleChange = (e) => {

@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+import Note from "../models/Note.js";
 import Project from "../models/Project.js";
 
 const createProject = async (req, res) => {
@@ -30,19 +32,34 @@ const getProjects = async (req, res) => {
 }
 
 const getProjectNotes = async (req, res) => {
-    const { projectId } = req.params;
+    const { id } = req.params;
 
     try {
-        const project = await Project.findById(projectId).populate('notes');
+        // Primero obtenemos el proyecto para verificar que existe
+        const project = await Project.findById(id);
+        
         if (!project) {
-            return res.status(404).json({ message: "Project not found" });
+            return res.status(404).json({ message: "Proyecto no encontrado" });
         }
-        res.status(200).json(project.notes);
+
+        // Buscamos todas las notas que tengan este projectId (como string o ObjectId)
+        const projectNotes = await Note.find({ 
+            $or: [
+                { projectId: id }, // Buscar como string
+                { projectId: new mongoose.Types.ObjectId(id) } // Buscar como ObjectId
+            ]
+        }).lean();
+
+        console.log('Project Notes encontradas:', projectNotes);
+
+        res.status(200).json(projectNotes);
+    } catch (error) {
+        console.error('Error completo:', error);
+        res.status(500).json({ 
+            message: "Error fetching project notes",
+            error: error.message
+        });
     }
-    catch (error) {
-        console.error('Error fetching project notes:', error);
-        res.status(500).json({ message: "Error fetching project notes" });
-    }
-}
+};
 
 export { createProject, getProjects, getProjectNotes };

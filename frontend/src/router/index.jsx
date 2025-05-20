@@ -6,6 +6,7 @@ import Layout from "../layout/Layout";
 import Register from "../pages/Register";
 import UserProfile from "../pages/UserProfile";
 import Projects from "../pages/Projects";
+import ProjectNotes from "../pages/ProjectNotes";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +30,12 @@ export const router = createBrowserRouter([
             {
                 path: '/projects',
                 element: <ProtectedRoute><Projects /></ProtectedRoute>,
+            },
+            {
+                path: '/project/:id',
+                element: <ProtectedRoute>
+                    <ProjectNotes />
+                </ProtectedRoute>
             },
             {
                 path: '/userProfile',

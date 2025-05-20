@@ -11,10 +11,10 @@ export const NoteProvider = ({children}) => {
 
     useEffect(() => {
         getNotes();
-    }, [notes]);
+    }, []);
 
     const newNote = async(formData) => {
-        const { title, content, dueDate, reminderDate } = {...formData};
+        const { title, content, dueDate, reminderDate, projectId } = {...formData};
 
         try {
             const response = await fetch(`${VITE_BASE_DB_URL}notes/create`, {
@@ -23,7 +23,7 @@ export const NoteProvider = ({children}) => {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify({ title, content, dueDate, reminderDate }),
+                body: JSON.stringify({ title, content, dueDate, reminderDate, projectId }),
             });
             if (!response.ok) {
                 setError('Error creating note');
