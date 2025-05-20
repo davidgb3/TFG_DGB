@@ -20,7 +20,9 @@ router.get("/check-auth", authMiddleware, async (req, res) => {
     res.status(200).json({ 
       message: "Autenticado", 
       userId: req.userId,
-      user: user.username 
+      user: user.username,
+      email: user.email,
+      role: user.role, 
     });
   } catch (error) {
     res.status(500).json({ message: "Error al obtener datos del usuario" });

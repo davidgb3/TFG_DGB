@@ -11,7 +11,7 @@ export const NoteProvider = ({children}) => {
 
     useEffect(() => {
         getNotes();
-    }, []);
+    }, [notes]);
 
     const newNote = async(formData) => {
         const { title, content, dueDate, reminderDate } = {...formData};

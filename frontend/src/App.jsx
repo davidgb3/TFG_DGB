@@ -1,11 +1,16 @@
 import React from 'react'
-import { Outlet, RouterProvider } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
-import NavBar from './components/NavBar'
+import { ThemeProvider } from './context/ThemeContext'
+import { AuthProvider } from './context/AuthContext'
+import { NoteProvider } from './context/NoteContext'
+import { ProjectProvider } from './context/ProjectContext'
 
 const App = () => {
   return (
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   )
 }
 

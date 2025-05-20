@@ -13,6 +13,11 @@ const noteSchema = new mongoose.Schema({
     isCompleted: { type: Boolean, default: false },
     important: { type: Boolean, default: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+    projectId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Project",
+        default: null
+    }
 });
 
 export default mongoose.model("Note", noteSchema);

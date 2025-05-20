@@ -1,19 +1,18 @@
-import React from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Button, Box } from '@mui/material';
-import NewNoteModal from './NewNoteModal';
 import Switch from '@mui/material/Switch';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import { useUser } from '../context/UserContext';
+import { useTheme } from '../context/ThemeContext';
 
 const NavBar = () => {
    const { isAuthenticated, logout } = useAuth();
    const { user } = useAuth();
-   const { userData, notifyUser } = useUser();
+   const { mode, toggleTheme } = useTheme();
 
-   const userPfp = user ? user.charAt(0).toUpperCase() : '?';
+   const username = user ? user.user : 'Guest';
+   const userPfp = username ? username.charAt(0).toUpperCase() : '?';
 
    const navigate = useNavigate();
    const handleLogout = () => {
@@ -29,8 +28,8 @@ const NavBar = () => {
         navigate('/');
    }
 
-   const handleNotifications = () => {
-        notifyUser(userData.id);
+   const handleProjects = () => {
+        navigate('/projects');
    }
 
   return (
@@ -52,18 +51,27 @@ const NavBar = () => {
       {isAuthenticated ? (
         <div className='flex flex-row gap-2 justify-between items-center w-full'>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: '4px', justifyContent: 'flex-start', alignItems: 'center' }}>
-            <img onClick={handleHome} className='cursor-pointer' width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
-            <NewNoteModal/>
+            <img 
+              onClick={handleHome} 
+              className='cursor-pointer' 
+              width='150px' 
+              src="../../image2.svg" 
+              alt="Nimbus Notes Logo" 
+              style={{
+                filter: mode === 'dark' ? 'invert(0)' : 'invert(1)',
+                transition: 'filter 0.3s ease-in-out'
+              }}
+            />
             <Button 
-              onClick={handleNotifications} 
+              onClick={handleHome} 
               variant='contained' 
-              color="text.main"
               sx={{
                 backgroundColor: 'crimson',
                 fontFamily: 'Nothing',
-                borderRadius: '10px 50px 50px 10px',
+                borderRadius: '50px 10px 10px 50px',
                 padding: '9px',
-                color: 'text.main',
+                color: 'text.primary',
+                transition: 'filter 0.3s ease-in-out',
                 '&:hover': {
                   fontWeight: 'bold',
                   color: 'white',
@@ -71,7 +79,26 @@ const NavBar = () => {
                 }
               }}
             >
-              Notify me!
+              My Notes
+            </Button>
+            <Button 
+              onClick={handleProjects} 
+              variant='contained' 
+              sx={{
+                backgroundColor: 'crimson',
+                fontFamily: 'Nothing',
+                borderRadius: '10px 50px 50px 10px',
+                padding: '9px',
+                color: 'text.primary',
+                transition: 'filter 0.3s ease-in-out',
+                '&:hover': {
+                  fontWeight: 'bold',
+                  color: 'white',
+                  backgroundColor: 'darkred'
+                }
+              }}
+            >
+              Projects
             </Button>
           </Box>
           <Box sx={{ 
@@ -81,57 +108,52 @@ const NavBar = () => {
             gap: 2
           }}>
             <Box>
-            <DarkModeIcon sx={{ color: 'white', fontSize: 30 }}/>
-            <Switch sx={{ 
-                '& .MuiSwitch-switchBase': {
+              {mode === 'dark' ? (
+                <DarkModeIcon sx={{ color: 'text.primary', fontSize: 30 }}/>
+              ) : (
+                <LightModeIcon sx={{ color: 'text.primary', fontSize: 30 }}/>
+              )}
+              <Switch 
+                checked={mode === 'light'}
+                onChange={toggleTheme}
+                sx={{ 
+                  '& .MuiSwitch-switchBase': {
                     padding: 1,
                     '&.Mui-checked': {
-                        '& + .MuiSwitch-track': {
-                            backgroundColor: 'accent',
-                            opacity: 1,
-                        },
-                        '& .MuiSwitch-thumb': {
-                            backgroundColor: 'text.primary',
-                        }
+                      '& + .MuiSwitch-track': {
+                        backgroundColor: 'accent',
+                        opacity: 1,
+                      },
+                      '& .MuiSwitch-thumb': {
+                        backgroundColor: 'text.primary',
+                      }
                     }
-                },
-                '& .MuiSwitch-thumb': {
+                  },
+                  '& .MuiSwitch-thumb': {
                     backgroundColor: 'accent',
                     width: 24,
                     height: 24,
-                    '&:before': {
-                        content: "''",
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        left: 0,
-                        top: 0,
-                        backgroundImage: `url(${LightModeIcon})`,
-                        backgroundSize: '14px',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
-                    }
-                },
-                '& .MuiSwitch-track': {
+                  },
+                  '& .MuiSwitch-track': {
                     backgroundColor: 'primary.light',
                     opacity: 1,
                     borderRadius: 20,
-                }
-              }}/>
-              <LightModeIcon sx={{ color: 'white', fontSize: 30 }}/>
+                  }
+                }}
+              />
             </Box>
-            <Avatar onClick={ handleProfile } sx={{ bgcolor: 'white', color: 'primary.main', fontFamily: 'Nothing', cursor: 'pointer', 
+            <Avatar onClick={ handleProfile } sx={{ bgcolor: 'text.primary', color: 'primary.main', fontFamily: 'Nothing', cursor: 'pointer', 
             '&:hover': {filter: 'opacity(75%)'}, transition: 'all 0.3s ease-in-out'  }}>{userPfp}</Avatar>
             <Button 
               onClick={handleLogout} 
               variant='contained' 
-              color="text.main"
               sx={{
                 backgroundColor: 'crimson',
                 fontFamily: 'Nothing',
                 borderRadius: '50px',
                 padding: '9px',
-                color: 'text.main',
+                color: 'text.primary',
+                transition: 'filter 0.3s ease-in-out',
                 '&:hover': {
                   fontWeight: 'bold',
                   color: 'white',
@@ -145,47 +167,52 @@ const NavBar = () => {
         </div>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          <img onClick={handleHome} className='cursor-pointer' width='150px' src="../../image2.png" alt="Nimbus Notes Logo" />
+          <img 
+            onClick={handleHome} 
+            className='cursor-pointer' 
+            width='150px' 
+            src="../../image2.svg" 
+            alt="Nimbus Notes Logo"
+            style={{
+              filter: mode === 'dark' ? 'invert(0)' : 'invert(1)',
+              transition: 'filter 0.3s ease-in-out'
+            }}
+          />
           <Box>
-            <DarkModeIcon sx={{ color: 'white', fontSize: 30 }}/>
-            <Switch sx={{ 
+            {mode === 'dark' ? (
+              <DarkModeIcon sx={{ color: 'text.primary', fontSize: 30 }}/>
+            ) : (
+              <LightModeIcon sx={{ color: 'text.primary', fontSize: 30 }}/>
+            )}
+            <Switch 
+              checked={mode === 'light'}
+              onChange={toggleTheme}
+              sx={{ 
                 '& .MuiSwitch-switchBase': {
-                    padding: 1,
-                    '&.Mui-checked': {
-                        '& + .MuiSwitch-track': {
-                            backgroundColor: 'accent',
-                            opacity: 1,
-                        },
-                        '& .MuiSwitch-thumb': {
-                            backgroundColor: 'text.primary',
-                        }
+                  padding: 1,
+                  '&.Mui-checked': {
+                    '& + .MuiSwitch-track': {
+                      backgroundColor: 'accent',
+                      opacity: 1,
+                    },
+                    '& .MuiSwitch-thumb': {
+                      backgroundColor: 'text.primary',
                     }
+                  }
                 },
                 '& .MuiSwitch-thumb': {
-                    backgroundColor: 'accent',
-                    width: 24,
-                    height: 24,
-                    '&:before': {
-                        content: "''",
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        left: 0,
-                        top: 0,
-                        backgroundImage: `url(${LightModeIcon})`,
-                        backgroundSize: '14px',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
-                    }
+                  backgroundColor: 'accent',
+                  width: 24,
+                  height: 24,
                 },
                 '& .MuiSwitch-track': {
-                    backgroundColor: 'primary.light',
-                    opacity: 1,
-                    borderRadius: 20,
+                  backgroundColor: 'primary.light',
+                  opacity: 1,
+                  borderRadius: 20,
                 }
-              }}/>
-              <LightModeIcon sx={{ color: 'white', fontSize: 30 }}/>
-            </Box>
+              }}
+            />
+          </Box>
         </Box>
       )}
     </Box>

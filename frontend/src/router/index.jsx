@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Layout from "../layout/Layout";
 import Register from "../pages/Register";
 import UserProfile from "../pages/UserProfile";
+import Projects from "../pages/Projects";
 
 export const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
                 path: '/register',
                 element: <Register />,
                 replace: true
+            },
+            {
+                path: '/projects',
+                element: <ProtectedRoute><Projects /></ProtectedRoute>,
             },
             {
                 path: '/userProfile',

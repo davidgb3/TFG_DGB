@@ -86,6 +86,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
             </Typography>
             <Typography 
                 sx={{ 
+                    color: 'text.primary',
                     fontFamily: 'Nothing',
                     width: '100%',  
                     minHeight: 'fit-content',
@@ -99,8 +100,10 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
             >
                 {note.content}
             </Typography>
-            <span className='flex flex-row gap-1'>
-                Due Date: 
+            <span className='flex flex-row gap-1 items-center'>
+                <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                    Due Date:
+                </Typography>
                 <Typography sx={{ color: 'accent', fontFamily:'Nothing' }}>
                     {new Date(note.dueDate).toLocaleString('es-ES', {
                         year: 'numeric',

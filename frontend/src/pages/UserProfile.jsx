@@ -21,7 +21,7 @@ const UserProfile = () => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2, width: 'fit-content', height: 'fit-content', backgroundColor: 'primary.main', color: 'white', padding: '20px', borderRadius: '10px' }}>
             <Avatar sx={{ 
-                bgcolor: 'white', 
+                bgcolor: 'text.primary', 
                 color: 'primary.main', 
                 fontFamily: 'Nothing', 
                 fontSize: '6rem', 
@@ -34,12 +34,12 @@ const UserProfile = () => {
             }}>{userPfp}</Avatar>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'center', gap: 1, width: 'fit-content', height: 'fit-content', color: 'white' }}>
                 <div className='flex flex-row gap-1 justify-between items-center'>
-                    <Box sx={{ padding: '10px', borderRadius: '50px 10px 10px 50px', backgroundColor: 'primary.light' }}>Username</Box>
-                    <Box sx={{ padding: '10px', borderRadius: '10px 50px 50px 10px', backgroundColor: 'primary.light' }}>{userData.username}</Box>
+                    <Box sx={{ color: 'text.primary', padding: '10px', borderRadius: '50px 10px 10px 50px', backgroundColor: 'primary.light' }}>Username</Box>
+                    <Box sx={{ color: 'text.primary', padding: '10px', borderRadius: '10px 50px 50px 10px', backgroundColor: 'primary.light' }}>{userData.username}</Box>
                 </div>
                 <div className='flex flex-row gap-1 justify-between items-center'>
-                    <Box sx={{ padding: '10px', borderRadius: '50px 10px 10px 50px', backgroundColor: 'primary.light' }}>Email</Box>
-                    <Box sx={{ padding: '10px', borderRadius: '10px 50px 50px 10px', backgroundColor: 'primary.light' }}>{userData.email}</Box>
+                    <Box sx={{ color: 'text.primary', padding: '10px', borderRadius: '50px 10px 10px 50px', backgroundColor: 'primary.light' }}>Email</Box>
+                    <Box sx={{ color: 'text.primary', padding: '10px', borderRadius: '10px 50px 50px 10px', backgroundColor: 'primary.light' }}>{userData.email}</Box>
                 </div>
                 <Button 
                     onClick={handleOpenEdit}
@@ -51,7 +51,7 @@ const UserProfile = () => {
                         fontFamily: 'Nothing',
                         borderRadius: '50px',
                         padding: '9px',
-                        color: 'text.main',
+                        color: 'text.primary',
                         '&:hover': {
                             fontWeight: 'bold',
                             color: 'white',

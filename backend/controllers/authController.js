@@ -37,25 +37,52 @@ const login = async (req, res) => {
 };
 // Controlador para el registro de usuarios
 const register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
-  // Verificar si el usuario ya existe
-  const existingUser = await User.findOne({ 
-    $or: [{ username }, { email }] 
-  });
-  if (existingUser) {
-    return res.status(400).json({ 
-      message: existingUser.username === username 
-        ? "El usuario ya existe" 
-        : "El email ya está registrado" 
+  try {
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ 
+      $or: [{ username }, { email }] 
     });
+    
+    if (existingUser) {
+      return res.status(400).json({ 
+        message: existingUser.username === username 
+          ? "El usuario ya existe" 
+          : "El email ya está registrado" 
+      });
+    }
+
+    // Si se está intentando crear un admin, verificar que quien lo crea es admin
+    if (role === 'admin') {
+      // Verificar si la solicitud viene de un admin (usando el token)
+      if (!req.userId) {
+        return res.status(403).json({ 
+          message: "No tienes permisos para crear usuarios administradores" 
+        });
+      }
+      
+      const requestingUser = await User.findById(req.userId);
+      if (!requestingUser || requestingUser.role !== 'admin') {
+        return res.status(403).json({ 
+          message: "Solo los administradores pueden crear otros administradores" 
+        });
+      }
+    }
+
+    // Crear y guardar el nuevo usuario
+    const user = new User({ 
+      username, 
+      email, 
+      password,
+      role: role || 'user' // Si no se especifica rol, será usuario normal
+    });
+    
+    await user.save();
+    res.status(201).json({ message: "Usuario registrado exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al registrar usuario" });
   }
-
-  // Crear y guardar el nuevo usuario
-  const user = new User({ username, email, password });
-  await user.save();
-
-  res.status(201).json({ message: "Usuario registrado" });
 };
 
 const editProfile = async (req, res) => {

@@ -55,65 +55,65 @@ const Login = () => {
         <form method="post" onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-1'>
             <div className='flex flex-row gap-2 mb-4'>
               <TextField required type="text" value={formData.username} onChange={handleChange} name="username"  placeholder="Username" label="Username" variant="filled" sx={{
-                backgroundColor: 'text.primary',
-                color: 'primary.main',
-                borderRadius: '5px',
-                '& .MuiFilledInput-input': { 
-                  color: 'accent', 
-                  fontFamily: 'Nothing',     
-                },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'primary.main',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'accent',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'accent',
-                  },
-                },
-                '& .MuiInputLabel-root': {
-                  color: 'primary.main',
-                  fontFamily: 'Nothing',
-                  '&.Mui-focused': {
-                    color: 'accent'
-                  }
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'primary.main',
-                }
-              }}/>
+                          backgroundColor: 'primary.main',
+                          color: 'text.primary',
+                          borderRadius: '5px',
+                          '& .MuiFilledInput-input': { 
+                            color: 'accent', 
+                            fontFamily: 'Nothing',     
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'primary.main',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'accent',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: 'accent',
+                            },
+                          },
+                          '& .MuiInputLabel-root': {
+                            color: 'text.primary',
+                            fontFamily: 'Nothing',
+                            '&.Mui-focused': {
+                              color: 'accent'
+                            }
+                          },
+                          '& .MuiOutlinedInput-input': {
+                            color: 'primary.main',
+                          }
+                        }}/>
               <TextField required type="password" value={formData.password} onChange={handleChange} name="password"  placeholder="Password" label="Password" variant="filled" sx={{
-                backgroundColor: 'text.primary',
-                color: 'primary.main',
-                borderRadius: '5px',
-                '& .MuiFilledInput-input': { 
-                  color: 'accent', 
-                  fontFamily: 'Nothing',     
-                },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'primary.main',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'accent',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'accent',
-                  },
-                },
-                '& .MuiInputLabel-root': {
-                  color: 'primary.main',
-                  fontFamily: 'Nothing',
-                  '&.Mui-focused': {
-                    color: 'accent'
-                  }
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'primary.main',
-                }
-              }}/>
+                          backgroundColor: 'primary.main',
+                          color: 'text.primary',
+                          borderRadius: '5px',
+                          '& .MuiFilledInput-input': { 
+                            color: 'accent', 
+                            fontFamily: 'Nothing',     
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'primary.main',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'accent',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: 'accent',
+                            },
+                          },
+                          '& .MuiInputLabel-root': {
+                            color: 'text.primary',
+                            fontFamily: 'Nothing',
+                            '&.Mui-focused': {
+                              color: 'accent'
+                            }
+                          },
+                          '& .MuiOutlinedInput-input': {
+                            color: 'primary.main',
+                          }
+                        }}/>
             </div>
             <Button variant='contained' fullWidth sx={{backgroundColor: 'accent', fontFamily: 'Nothing', borderRadius:'50px', '&:hover': {fontWeight: 'bold', backgroundColor: 'darkred'}}} type="submit" >Login</Button>
         </form>

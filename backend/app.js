@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 import { verifyEmailConfig } from "./config/email.js";
 import setupEmailScheduler from "./cron/emailScheduler.js";
 
@@ -43,6 +44,7 @@ await verifyEmailConfig(); // Verificar la configuración de correo
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notes", noteRoutes); // Asegúrate de importar y usar las rutas de notas
+app.use("/api/projects", projectRoutes); // Asegúrate de importar y usar las rutas de proyectos
 
 setupEmailScheduler(); // Configurar el programador de correos electrónicos
 

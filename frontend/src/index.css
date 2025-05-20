@@ -6,8 +6,14 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-  }
+}
   
 * {
-  font-family: 'Nothing', Arial, sans-serif;
+    font-family: 'Nothing', Arial, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    margin: 0;
+    padding: 0;
 }

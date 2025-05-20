@@ -29,7 +29,7 @@ const Register = () => {
       await resgister(username, email, password);
       setTimeout(() => {
         navigate('/login', { replace: true });
-      }, 2000);
+      }, 200);
     } catch (error) {
       console.error("Error durante el registro:", error);
     }

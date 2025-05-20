@@ -1,38 +1,41 @@
 import { createTheme } from "@mui/material";
 
 const accentColor = '#D71921';
-const primaryMain = '#1B1B1D';
-const primaryLight = '#3E3E40';
-const primaryDark = '#000000';
-const textColor = '#ffffff';
 
-export const theme = createTheme({
+export const getTheme = (mode) => {
+  const isDark = mode === 'dark';
+  
+  return createTheme({
     palette: {
+      mode: mode,
       primary: {
-        main: primaryMain,
-        light: primaryLight, // versión más clara del color principal
-        dark: primaryDark,  // versión más oscura del color principal
-        contrastText: '#fff',
+        main: isDark ? '#1B1B1D' : '#ffffff',
+        light: isDark ? '#3E3E40' : '#bababf', 
+        dark: isDark ? '#000000' : '#e0e0e0',
+        contrastText: isDark ? '#fff' : '#000',
       },
-      accent: accentColor,  // Definimos el color como una propiedad directa
+      accent: accentColor,
       text: {
-        primary: textColor,
-        contrastText: '#000',
+        primary: isDark ? '#ffffff' : '#1B1B1D',
+        secondary: isDark ? '#f5f5f5' : '#3E3E40',
+      },
+      background: {
+        default: isDark ? '#1B1B1D' : '#ffffff',
+        paper: isDark ? '#000000' : '#f5f5f5',
       }
     },
-
     components: {
       MuiPickersTextField: {
         styleOverrides: {
           root: {
-            color: textColor,
+            color: isDark ? '#ffffff' : '#1B1B1D',
             borderRadius: '5px',
-            backgroundColor: primaryMain,
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
             fontFamily: 'Nothing',
             innerHeight: 'fit-content',
             label: {
               fontFamily: 'Nothing',
-              color: textColor
+              color: isDark ? '#ffffff' : '#1B1B1D'
             }
           }
         }
@@ -40,9 +43,9 @@ export const theme = createTheme({
       MuiInputBase: {
         styleOverrides: {
           root: {
-            color: textColor,
+            color: isDark ? '#ffffff' : '#1B1B1D',
             '& input': {
-              color: textColor
+              color: isDark ? '#ffffff' : '#1B1B1D'
             }
           }
         }
@@ -50,60 +53,57 @@ export const theme = createTheme({
       MuiDateCalendar: {
         styleOverrides: {
           root: {
-            color: primaryMain,
+            color: isDark ? '#ffffff' : '#1B1B1D',
             borderRadius: '2px',
             borderWidth: '1px',
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
             borderColor: accentColor,
-            border: `2px solid ${accentColor}`,
-            backgroundColor: textColor,
+            border: `2px solid ${accentColor}`
           }
         }
       },
       MuiPickersDay: {
         styleOverrides: {
           root: {
-            color: primaryMain,
+            color: isDark ? '#ffffff' : '#1B1B1D',
             borderRadius: '5px',
-            borderColor: accentColor,
-            border: `1px solid ${accentColor}`,
-            backgroundColor: textColor,
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
             fontFamily: 'Nothing',
             '&:hover': {
               color: accentColor,
-              border: `2px solid ${primaryLight}`,
+              backgroundColor: isDark ? '#3E3E40' : '#f5f5f5'
             }
           },
           today: {
             color: accentColor,
             borderColor: accentColor,
-            border: `2px solid ${accentColor}`,
+            border: `2px solid ${accentColor}`
           },
           selected: {
-            color: textColor,
-            backgroundColor: accentColor,
-            border: `2px solid grey`,
+            color: '#ffffff',
+            backgroundColor: `${accentColor} !important`
           }
         }
       },
       MuiClock: {
         styleOverrides: {
           root: {
-            backgroundColor: textColor,
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
             borderRadius: '10px',
-            border: `2px solid ${accentColor}`,
+            border: `2px solid ${accentColor}`
           },
           clock: {
-            backgroundColor: textColor,
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
             '& .MuiClockPointer-root': {
-              backgroundColor: accentColor,
+              backgroundColor: accentColor
             },
             '& .MuiClockPointer-thumb': {
               backgroundColor: accentColor,
-              borderColor: accentColor,
-            },
+              borderColor: accentColor
+            }
           },
           pin: {
-            backgroundColor: accentColor,
+            backgroundColor: accentColor
           }
         }
       },
@@ -111,10 +111,10 @@ export const theme = createTheme({
         styleOverrides: {
           root: {
             fontFamily: 'Nothing',
-            color: primaryMain,
+            color: isDark ? '#ffffff' : '#1B1B1D',
             '&.Mui-selected': {
-              color: textColor,
-              backgroundColor: accentColor,
+              color: '#ffffff',
+              backgroundColor: accentColor
             }
           }
         }
@@ -122,15 +122,32 @@ export const theme = createTheme({
       MuiTimeClock: {
         styleOverrides: {
           root: {
-            backgroundColor: textColor,
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
             '& .MuiClock-pin': {
-              backgroundColor: accentColor,
+              backgroundColor: accentColor
             },
             '& .MuiClockPointer-root': {
-              backgroundColor: accentColor,
+              backgroundColor: accentColor
             }
+          }
+        }
+      },
+      MuiPickersPopper: {
+        styleOverrides: {
+          paper: {
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
+            color: isDark ? '#ffffff' : '#1B1B1D'
+          }
+        }
+      },
+      MuiPickersToolbar: {
+        styleOverrides: {
+          root: {
+            backgroundColor: isDark ? '#1B1B1D' : '#ffffff',
+            color: isDark ? '#ffffff' : '#1B1B1D'
           }
         }
       }
     }
-});
+  });
+};

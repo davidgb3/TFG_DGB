@@ -5,6 +5,7 @@ import EditNoteModal from '../components/EditNoteModal';
 import NoteDetailsModal from '../components/NoteDetailsModal';
 import Note from '../components/Note';
 import CompletedNote from '../components/CompletedNote';
+import NewNoteModal from '../components/NewNoteModal';
 
 const Home = () => {
     const { notes, updateNoteState, getNotes, setAsImportant } = useNote();
@@ -56,7 +57,7 @@ const Home = () => {
                 textAlign: 'start',
                 borderBottom: '2px solid',
                 borderColor: 'accent',
-            }}>My Notes</Typography>
+            }}>My Notes <NewNoteModal/> </Typography>
             
             <Box sx={{ 
                 display: 'flex', 
