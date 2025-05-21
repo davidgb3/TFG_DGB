@@ -6,12 +6,15 @@ import NoteDetailsModal from '../components/NoteDetailsModal';
 import Note from '../components/Note';
 import CompletedNote from '../components/CompletedNote';
 import NewNoteModal from '../components/NewNoteModal';
+import DeleteModal from '../components/DeleteModal';
 
 const Home = () => {
-    const { notes, updateNoteState, getNotes, setAsImportant } = useNote();
+    const { notes, updateNoteState, getNotes, setAsImportant, deleteNote } = useNote();
     const [selectedNote, setSelectedNote] = useState(null);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openViewModal, setOpenViewModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [noteToDelete, setNoteToDelete] = useState(null);
 
     const handleOpenEdit = (e, note) => {
         e.stopPropagation();
@@ -46,6 +49,31 @@ const Home = () => {
             console.error('Error al marcar como importante:', error);
         }
     }
+
+    const handledeleteNote = async (e, note) => {
+        e.stopPropagation();
+        try {
+            await deleteNote(note._id);
+            getNotes();
+        } catch (error) {
+            console.error('Error al eliminar nota:', error);
+        }
+    }
+
+    const handleOpenDelete = (e, note) => {
+        e.stopPropagation();
+        setNoteToDelete(note);
+        setOpenDeleteModal(true);
+    };
+
+    const handleConfirmDelete = async (note) => {
+        try {
+            await deleteNote(note._id);
+            getNotes();
+        } catch (error) {
+            console.error('Error al eliminar nota:', error);
+        }
+    };
 
     return (
         <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
@@ -86,6 +114,7 @@ const Home = () => {
                             onEdit={handleOpenEdit}
                             onView={handleOpenView}
                             onMarkAsImportant={handlemarkAsImportant}
+                            onDelete={handleOpenDelete}
                         />
                     ))
                 }
@@ -119,6 +148,7 @@ const Home = () => {
                                 onRestore={handleToggleComplete}
                                 onEdit={handleOpenEdit}
                                 onView={handleOpenView}
+                                onDelete={handleOpenDelete}
                             />
                         ))}
                     </Box>
@@ -138,6 +168,15 @@ const Home = () => {
                         handleClose={() => setOpenViewModal(false)}
                     />
                 </>
+            )}
+
+            {noteToDelete && (
+                <DeleteModal
+                    note={noteToDelete}
+                    open={openDeleteModal}
+                    handleClose={() => setOpenDeleteModal(false)}
+                    onConfirm={handleConfirmDelete}
+                />
             )}
         </div>
     );

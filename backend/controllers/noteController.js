@@ -49,7 +49,7 @@ const deleteNote = async (req, res) => {
 const getNotesByUser = async (req, res) => {
     const userId = req.userId;
     try {
-        const notes = await Note.find({ userId });
+        const notes = await Note.find({ userId, projectId: null });
         const now = new Date();
 
         const updatedNotes = await Promise.all(notes.map(async (note) => {

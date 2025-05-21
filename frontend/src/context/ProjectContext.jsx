@@ -64,7 +64,7 @@ export const ProjectProvider = ({children}) => {
     const getProjectNotes = async (id) => {
         setLoading(true);
         try {
-            const response = await fetch(`${VITE_BASE_DB_URL}projects/${id}/notes`, {
+            const response = await fetch(`${VITE_BASE_DB_URL}projects/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -28,6 +28,20 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 paddingBottom: 1
             }}>
                 {note?.title}
+
+                {note?.username ? (
+                    <span className='flex flex-row gap-1 items-center'>
+                        <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                            Created by:
+                        </Typography>
+                        <Typography sx={{ color: 'accent', fontFamily: 'Nothing' }}>
+                            {note.username}
+                        </Typography>
+                    </span>
+                ) : (
+                    <></>
+                )
+                }
             </Typography>
 
             <Typography sx={{ 

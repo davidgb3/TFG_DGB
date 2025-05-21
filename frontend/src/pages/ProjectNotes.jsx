@@ -1,13 +1,27 @@
 import { useParams } from 'react-router-dom';
 import { useProject } from '../context/ProjectContext';
-import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { Box, Typography, Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import Note from '../components/Note';
+import EditNoteModal from '../components/EditNoteModal';
+import NoteDetailsModal from '../components/NoteDetailsModal';
+import { useNote } from '../context/NoteContext';
+import CompletedNote from '../components/CompletedNote';
+import NewNoteModal from '../components/NewNoteModal';
+import DeleteModal from '../components/DeleteModal';
 
 const ProjectNotes = () => {
   const { id } = useParams();
-  const { projects, getProjectNotes, projectNotes } = useProject();
-  
-  // Encontrar el proyecto actual usando el id de la URL
+  const { projects, getProjectNotes, projectNotes, loading } = useProject();
+  const { updateNoteState, setAsImportant, deleteNote } = useNote();
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [error, setError] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState(null);
+
   const currentProject = projects?.find(project => project._id === id);
 
   useEffect(() => {
@@ -16,108 +30,239 @@ const ProjectNotes = () => {
     }
   }, [id]);
 
+  // Manejadores de eventos para las notas
+  const handleOpenEdit = (e, note) => {
+    e.stopPropagation();
+    setSelectedNote(note);
+    setOpenEditModal(true);
+  };
+
+  const handleOpenView = (note) => {
+    setSelectedNote(note);
+    setOpenViewModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false);
+    setSelectedNote(null);
+  };
+
+  const handleToggleComplete = async (e, note) => {
+    e.stopPropagation();
+    try {
+      await updateNoteState(note._id, { isCompleted: !note.isCompleted });
+      // Añadir mensaje de retroalimentación
+      setNotificationMessage(
+        note.isCompleted ? 
+        "Note marked as active" : 
+        "Note marked as completed"
+      );
+      // Recargar las notas del proyecto después de actualizar
+      getProjectNotes(id);
+    } catch (error) {
+      console.error('Error al cambiar estado:', error);
+      setError('Failed to update note status');
+    }
+  };
+
+  const handleMarkAsImportant = async (e, note) => {
+    e.stopPropagation();
+    try {
+      await setAsImportant(note._id, { important: !note.important });
+      // Recargar las notas del proyecto después de actualizar
+      getProjectNotes(id);
+    } catch (error) {
+      console.error('Error al marcar como importante:', error);
+    }
+  };
+
+  const handleOpenDelete = (e, note) => {
+    e.stopPropagation();
+    setNoteToDelete(note);
+    setOpenDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async (note) => {
+    try {
+      await deleteNote(note._id);
+      getProjectNotes(id); // Recargar las notas del proyecto
+      setNotificationMessage("Note deleted successfully");
+    } catch (error) {
+      console.error('Error al eliminar nota:', error);
+      setError('Failed to delete note');
+    }
+  };
+
+  // Separar las notas en completadas y no completadas
+  const activeNotes = projectNotes?.filter(note => !note.isCompleted) || [];
+  const completedNotes = projectNotes?.filter(note => note.isCompleted) || [];
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
   return (
-    <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
+    <div className='flex flex-col items-start justify-start w-full min-h-screen pl-10 pr-10 pt-5 pb-5'>
       <Typography sx={{ 
-          fontFamily:'nothing',
-          fontSize: '4rem',
-          color: 'text.primary',
-          marginBottom: '20px',
-          textAlign: 'start',
-          borderBottom: '2px solid',
-          borderColor: 'accent',
+        fontFamily:'nothing',
+        fontSize: '4rem',
+        color: 'text.primary',
+        marginBottom: '20px',
+        textAlign: 'start',
+        borderBottom: '2px solid',
+        borderColor: 'accent',
       }}>
-        {currentProject?.name}
+        {currentProject?.name} <NewNoteModal />
       </Typography>
-      
-      {/* Cambiamos la estructura para evitar anidar Typography */}
+
       <Box sx={{ 
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          marginBottom: '20px',
+        width: '100%',
+        marginBottom: '0.5rem'
       }}>
-        <Typography 
-          sx={{ 
-            color: 'accent', 
-            fontFamily: 'Nothing', 
-            fontSize: '1.5rem' 
-          }}
-        >
-          Description:
-        </Typography>
-        <Typography 
-          sx={{ 
-            color: 'text.primary',
-            fontFamily: 'Nothing',
-            fontSize: '1.5rem'
-          }}
-        >
-          {currentProject?.description}
+        <Typography variant="h5" sx={{ 
+          color: 'text.primary',
+          fontFamily: 'Nothing',
+        }}>
+          Description: {currentProject?.description}
         </Typography>
       </Box>
-      
-      {/* Aquí puedes renderizar las notas del proyecto */}
-      <Box 
-          component='div' 
-          sx={{ 
-              width: 'auto', 
-              minWidth: '250px', 
-              maxWidth: '1000px',
-              height: 'fit-content',
-              minHeight: 'fit-content',
-              position: 'relative',
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center',
-              alignItems: 'start',
-              gap: 1, 
-              padding: 2, 
-              backgroundColor: 'primary.main', 
-              borderRadius: '10px',
-          }}
-      >
-        <Typography variant="h2" 
-            sx={{ 
-                fontFamily: 'Nothing',
-                fontSize: '2rem',
-                color: 'text.primary',
-                borderBottom: '2px solid',
-                borderColor: 'accent',
-                marginBottom: '10px',
-            }}>
-          Notes:
-        </Typography>
-        {projectNotes?.notes?.map((note) => (
-          <Box 
-            key={note._id} 
-            sx={{ 
-              padding: 2, 
-              backgroundColor: 'primary.light', 
-              borderRadius: '5px', 
-              marginBottom: 1,
-              width: '100%'
-            }}
-          >
-            <Typography variant="h3" sx={{ 
+
+      <Divider sx={{ 
+        width: '100%', 
+        borderColor: 'accent',
+        opacity: 0.5,
+        my: 3 
+      }}/>
+
+      {/* Notas Activas */}
+      <Typography variant="h4" sx={{ 
+        color: 'text.primary',
+        fontFamily: 'Nothing',
+        marginBottom: '1rem',
+        borderBottom: '2px solid',
+        borderColor: 'accent',
+      }}>
+        Active Notes
+      </Typography>
+      <Box sx={{ 
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: '20px',
+        justifyContent: 'start',
+        alignItems: 'start',
+        marginBottom: '2rem'
+      }}>
+        {activeNotes.length > 0 ? (
+          activeNotes
+            .sort((a, b) => {
+              if (a.important && !b.important) return -1;
+              if (!a.important && b.important) return 1;
+              return new Date(a.dueDate) - new Date(b.dueDate);
+            })
+            .map((note) => (
+              <Box>
+                <Note
+                key={note._id}
+                note={note}
+                onToggleComplete={handleToggleComplete}
+                onEdit={handleOpenEdit}
+                onView={handleOpenView}
+                onMarkAsImportant={handleMarkAsImportant}
+                onDelete={handleOpenDelete}
+                createdBy={note.username}
+              /> 
+              </Box>
+            ))
+        ) : (
+          <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+            No active notes
+          </Typography>
+        )}
+      </Box>
+
+      {/* Divider y Notas Completadas - solo se muestran si hay notas completadas */}
+      {completedNotes.length > 0 && (
+        <>
+          <Divider sx={{ 
+            width: '100%', 
+            borderColor: 'accent',
+            opacity: 0.5,
+            my: 4 
+          }}/>
+
+          <Box sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}>
+            <Typography variant="h4" sx={{ 
               color: 'text.primary',
               fontFamily: 'Nothing',
-              fontSize: '1.5rem',
-              marginBottom: 1
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              borderBottom: '2px solid',
+              borderColor: 'accent',
+              width: 'fit-content',
             }}>
-              {note.title}
+              Completed Notes
             </Typography>
-            <Typography variant="body1" sx={{ 
-              color: 'text.primary',
-              fontFamily: 'Nothing' 
+
+            <Box sx={{ 
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: '20px',
+              justifyContent: 'start',
+              alignItems: 'start',
             }}>
-              {note.content}
-            </Typography>
+              {completedNotes
+                .sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate))
+                .map((note) => (
+                  <CompletedNote
+                    key={note._id}
+                    note={note}
+                    onRestore={handleToggleComplete}
+                    onEdit={handleOpenEdit}
+                    onView={handleOpenView}
+                    onDelete={handleOpenDelete}
+                    createdBy={note.username}
+                  />
+                ))}
+            </Box>
           </Box>
-        ))}
-      </Box>
+        </>
+      )}
+
+      {selectedNote && (
+        <>
+          <EditNoteModal 
+            note={selectedNote}
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+          />
+          <NoteDetailsModal 
+            note={selectedNote}
+            open={openViewModal}
+            handleClose={() => setOpenViewModal(false)}
+          />
+        </>
+      )}
+
+      {noteToDelete && (
+        <DeleteModal
+          note={noteToDelete}
+          open={openDeleteModal}
+          handleClose={() => setOpenDeleteModal(false)}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default ProjectNotes;

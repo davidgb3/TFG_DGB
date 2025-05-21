@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
-import { formatDateInCEST } from '../helpers/HourRenderFix.jsx';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
+const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
     return (
         <Box 
             component='div' 
@@ -65,6 +65,19 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
                         }
                     }}
                 />
+
+                <DeleteForeverIcon 
+                    onClick={(e) => onDelete(e, note)}
+                    sx={{
+                        color: 'text.primary',
+                        transition: 'all 0.3s ease',
+                        fontSize: '2rem',
+                        '&:hover': {
+                            color: 'accent',
+                            transform: 'scale(1.1)'
+                        }
+                    }}
+                />
             </Box>
             <Typography 
                 variant="h2" 
@@ -114,6 +127,20 @@ const CompletedNote = ({ note, onRestore, onEdit, onView }) => {
                         timeZone: 'Europe/Madrid',
                     })}
                 </Typography>
+
+                {note?.username ? (
+                    <span className='flex flex-row gap-1 items-center'>
+                        <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                            Created by:
+                        </Typography>
+                        <Typography sx={{ color: 'accent', fontFamily: 'Nothing' }}>
+                            {note.username}
+                        </Typography>
+                    </span>
+                ) : (
+                    <></>
+                )
+                }
             </span>
         </Box>
     );

@@ -3,8 +3,9 @@ import { Box, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => {
+const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDelete }) => {
     return (
         <Box 
             component='div' 
@@ -28,6 +29,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
                 transition: 'all 0.3s ease',
                 border: note.important ? '2px solid' : 'none',
                 borderColor: note.important ? 'accent' : 'transparent',
+                opacity: note.isCompleted ? 0.7 : 1,
                 '&:hover': {
                     transform: 'translateY(-5px)',
                     backgroundColor: 'primary.light',
@@ -98,6 +100,18 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
                         }}
                     />
                 )}
+                <DeleteForeverIcon 
+                    onClick={(e) => onDelete(e, note)}
+                    sx={{
+                        color: 'text.primary',
+                        transition: 'all 0.3s ease',
+                        fontSize: '2rem',
+                        '&:hover': {
+                            color: 'accent',
+                            transform: 'scale(1.1)'
+                        }
+                    }}
+                />
             </Box>
             <Typography 
                 variant="h2" 
@@ -105,14 +119,14 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
                     fontFamily: 'Nothing',
                     fontSize: '2.25rem',
                     width: 'auto',
-                    maxWidth: 'calc(100% - 60px)', // Espacio para los iconos
+                    maxWidth: 'calc(100% - 100px)', // Espacio para los iconos
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     wordBreak: 'break-word',
                     paddingRight: '50px',
                     color: 'text.primary',
-                    marginRight: '60px' // Espacio fijo para los iconos
+                    marginRight: '100px' // Espacio fijo para los iconos
                 }}
             >
                 {note.title}
@@ -129,7 +143,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
             >
                 {note.content}
             </Typography>
-            <span className='flex flex-row gap-1 items-center'>
+            <span className='flex flex-row gap-1 items-center justify-between flex-wrap'>
                 <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
                     Due Date:
                 </Typography>
@@ -143,6 +157,19 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant }) => 
                         timeZone: 'Europe/Madrid',
                     })}
                 </Typography>
+                {note?.username ? (
+                    <span className='flex flex-row gap-1 items-center'>
+                        <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                            Created by:
+                        </Typography>
+                        <Typography sx={{ color: 'accent', fontFamily: 'Nothing' }}>
+                            {note.username}
+                        </Typography>
+                    </span>
+                ) : (
+                    <></>
+                )
+                }
             </span>
         </Box>
     );

@@ -7,6 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { es } from 'date-fns/locale';
 import { useNote } from '../context/NoteContext';
+import { useParams } from 'react-router-dom';
 
 const NewNoteModal = () => {
     const [open, setOpen] = useState(false);
@@ -14,12 +15,14 @@ const NewNoteModal = () => {
     const handleClose = () => setOpen(false);
     const { newNote, error } = useNote();
 
+    const { id } = useParams();
+
     const [formData, setFormData] = useState({
         title: "",
         content: "",
         dueDate: [null, null],
         reminderDate: [null, null],
-        projectId: null,
+        projectId: id ? id : null,
       })
 
     const handleChange = (e) => {

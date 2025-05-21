@@ -42,17 +42,24 @@ const getProjectNotes = async (req, res) => {
             return res.status(404).json({ message: "Proyecto no encontrado" });
         }
 
-        // Buscamos todas las notas que tengan este projectId (como string o ObjectId)
+        // Buscamos las notas y poblamos el campo userId con el username del User
         const projectNotes = await Note.find({ 
             $or: [
-                { projectId: id }, // Buscar como string
-                { projectId: new mongoose.Types.ObjectId(id) } // Buscar como ObjectId
+                { projectId: id },
+                { projectId: new mongoose.Types.ObjectId(id) }
             ]
-        }).lean();
+        })
+        .populate('userId', 'username') // Poblar el campo userId con solo el username
+        .lean();
 
-        console.log('Project Notes encontradas:', projectNotes);
+        // Transformar el resultado para tener el username en un formato más limpio
+        const notesWithUsername = projectNotes.map(note => ({
+            ...note,
+            username: note.userId.username, // Añadir el username directamente en la raíz
+            userId: note.userId._id // Mantener solo el ID del usuario
+        }));
 
-        res.status(200).json(projectNotes);
+        res.status(200).json(notesWithUsername);
     } catch (error) {
         console.error('Error completo:', error);
         res.status(500).json({ 
