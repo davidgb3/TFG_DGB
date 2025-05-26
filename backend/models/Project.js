@@ -29,6 +29,10 @@ const projectSchema = new mongoose.Schema({
     notes: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Note" 
+    }],
+    allowed_users: [{
+        type: String, 
+        ref: "User"
     }]
 });
 

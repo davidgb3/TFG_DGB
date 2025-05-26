@@ -3,16 +3,54 @@ import NewProjectModal from "../components/NewProjectModal";
 import { useProject } from "../context/ProjectContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import ShareIcon from '@mui/icons-material/Share';
+import { useState } from "react";
+import InviteUserModal from "../components/InviteUserModal";
+import { useUser } from "../context/UserContext";
+import EditIcon from '@mui/icons-material/Edit';
+import EditProject from '../components/EditProject';
 
 const Projects = () => {
 
     const { projects } = useProject();
     const { user } = useAuth();
+    const { getUserList } = useUser();
     
     const navigate = useNavigate();
 
+    const [openInviteModal, setOpenInviteModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [selectedProject, setSelectedProject] = useState(null);
+
     const handleProjectNotes = (projectId) => {
         navigate(`/project/${projectId}`);	
+    };
+
+    const handleOpenInviteModal = (e, projectId) => {
+        e.stopPropagation(); // Evita que se abra el proyecto
+        setSelectedProject(projectId);
+        handleGetUserList(projectId); // Obtiene la lista de usuarios
+        setOpenInviteModal(true);
+    };
+
+    const handleCloseInviteModal = () => {
+        setOpenInviteModal(false);
+        setSelectedProject(null);
+    };
+
+    const handleGetUserList = (projectId) => {
+        getUserList(projectId);
+    }
+
+    const handleOpenEdit = (e, project) => {
+        e.stopPropagation();
+        setSelectedProject(project);
+        setOpenEditModal(true);
+    };
+
+    const handleCloseEdit = () => {
+        setOpenEditModal(false);
+        setSelectedProject(null);
     };
 
     return (
@@ -54,19 +92,60 @@ const Projects = () => {
                                 backgroundColor: 'primary.light',
                             }
                         }}
-                    >
+                    >   
+                        <Box sx={{ 
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: 'fit-content',
+                            height: 'fit-content',
+                            gap: 1
+                        }}>
+                            <EditIcon 
+                                onClick={(e) => handleOpenEdit(e, project)}
+                                sx={{
+                                    color: 'text.primary',
+                                    transition: 'all 0.3s ease',
+                                    fontSize: '2rem',
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        color: 'accent',
+                                        transform: 'scale(1.1)'
+                                    }
+                                }}
+                            />
+                            <ShareIcon 
+                                onClick={(e) => {handleOpenInviteModal(e, project._id)}}
+                                sx={{
+                                    color: 'text.primary',
+                                    transition: 'all 0.3s ease',
+                                    fontSize: '2rem',
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        color: 'accent',
+                                        transform: 'scale(1.1)'
+                                    }
+                                }}
+                            />
+                        </Box>
                         <Typography variant="h2" 
                             sx={{ 
-                                fontFamily: 'Nothing',
-                                fontSize: '2.25rem',
-                                width: 'auto',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                wordBreak: 'break-word',
-                                paddingRight: '50px',
-                                color: 'text.primary',
-                            }}>{project.name}</Typography>
+                            fontFamily: 'Nothing',
+                            fontSize: '2.25rem',
+                            width: 'auto',
+                            maxWidth: 'calc(100% - 40px)', // Espacio para los iconos
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            wordBreak: 'break-word',
+                            paddingRight: '50px',
+                            color: 'text.primary',
+                            marginRight: '40px' // Espacio fijo para los iconos
+                        }}>{project.name}</Typography>
 
                         <Typography variant="h2" 
                             sx={{ 
@@ -83,6 +162,20 @@ const Projects = () => {
                     </Box>
                 ))}
             </Box>
+            {selectedProject && (
+                <InviteUserModal
+                    open={openInviteModal}
+                    handleClose={handleCloseInviteModal}
+                    projectId={selectedProject}
+                />
+            )}
+            {selectedProject && (
+                <EditProject
+                    project={selectedProject}
+                    open={openEditModal}
+                    handleClose={handleCloseEdit}
+                />
+            )}
         </div>
     );
 }

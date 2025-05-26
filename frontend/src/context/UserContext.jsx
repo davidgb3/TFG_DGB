@@ -7,9 +7,10 @@ export const UserProvider = ({ children }) => {
     const [userData, setUserData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [userList, setUserList] = useState([]);
 
     useEffect(() => {
-        fetchUserData();
+        fetchUserData();   
     }, []);
     
     const fetchUserData = async () => {
@@ -50,7 +51,6 @@ export const UserProvider = ({ children }) => {
                 setError("Error updating user data");
                 return;
             }
-            const data = await response.json();
             setLoading(false);
         } catch (error) {
             setError(error.message);
@@ -77,9 +77,30 @@ export const UserProvider = ({ children }) => {
             setLoading(true);
         }
     };
+
+    const getUserList = async (projectId) => {
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}users/getUsers`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ projectId }),
+            });
+            if (!response.ok) {
+                setError("Error fetching user list");
+                return;
+            }
+            const data = await response.json();
+            setUserList(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
     
     return (
-        <UserContext.Provider value={{ userData, error, loading, editUserData, notifyUser }}>
+        <UserContext.Provider value={{ userData, error, loading, editUserData, notifyUser, userList, getUserList }}>
         {children}
         </UserContext.Provider>
     );

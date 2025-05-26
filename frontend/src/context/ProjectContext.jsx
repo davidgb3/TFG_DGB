@@ -84,10 +84,60 @@ export const ProjectProvider = ({children}) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const inviteUserToProject = async (projectId, userId) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}projects/invite_users`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ projectId, userId }),
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                setError(data.message);
+                return;
+            }
+
+            // Si todo va bien, actualizamos la lista de proyectos
+            getProjects();
+            setError(null);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const editProject = async (id, formData) => {
+        const { name, description, allowed_users } = {...formData};
+
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}projects/edit/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ name, description, allowed_users }),
+            });
+            if (!response.ok) {
+                setError('Error updating project');
+                return;
+            }
+            getProjects();
+        } catch (error) {
+            setError(error.message);
+        }
     }
 
     return (
-        <ProjectContext.Provider value={{ newProject, projects, loading, setLoading, error, setError, getProjectNotes, projectNotes }}>
+        <ProjectContext.Provider value={{ newProject, projects, loading, setLoading, error, setError, getProjectNotes, projectNotes, inviteUserToProject, editProject }}>
             {children}
         </ProjectContext.Provider>
     )

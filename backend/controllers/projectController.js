@@ -69,4 +69,46 @@ const getProjectNotes = async (req, res) => {
     }
 };
 
-export { createProject, getProjects, getProjectNotes };
+const shareProject = async (req, res) => {
+    const { projectId, userId } = req.body;
+
+    try {
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+        if (project.allowed_users.includes(userId)) {
+            return res.status(400).json({ message: "El usuario ya tiene acceso a este proyecto" });
+        }
+        project.allowed_users.push(userId);
+        await project.save();
+        res.status(200).json({ message: "Proyecto compartido exitosamente" });
+    } catch (error) {
+        console.error('Error sharing project:', error);
+        res.status(500).json({ message: "Error sharing project" });
+    }
+}
+
+const editProject = async (req, res) => {
+    const { id } = req.params;
+    const { name, description, allowed_users } = req.body;
+
+    try {
+        const updatedProject = await Project.findByIdAndUpdate(
+            id,
+            { name, description, allowed_users },
+            { new: true }
+        );
+
+        if (!updatedProject) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+
+        res.status(200).json(updatedProject);
+    } catch (error) {
+        console.error('Error updating project:', error);
+        res.status(500).json({ message: "Error updating project" });
+    }
+};
+
+export { createProject, getProjects, getProjectNotes, shareProject, editProject };

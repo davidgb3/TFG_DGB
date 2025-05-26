@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import {sendEmail} from "../services/emailService.js";
 import Note from "../models/Note.js";
+import Project from "../models/Project.js"; // Asegúrate de importar el modelo de Project
 
 // Controlador para añadir usuarios (protegido por autenticación)
 const addUser = async (req, res) => {
@@ -76,4 +77,30 @@ const sendEmailToUser = async (req, res) => {
   }
 }
 
-export { addUser, getUserProfile, sendEmailToUser };
+const fetchAllusers = async (req, res) => {
+  try {
+    const { projectId } = req.body; // Obtenemos el projectId desde la query
+
+    // Primero obtenemos el proyecto para ver sus allowed_users
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ message: "Proyecto no encontrado" });
+    }
+
+    // Buscamos usuarios que:
+    // 1. No sean el usuario actual ($ne: req.userId)
+    // 2. No estén en la lista de allowed_users ($nin: project.allowed_users)
+    const users = await User.find({
+      $and: [
+        { _id: { $ne: req.userId } },
+        { _id: { $nin: project.allowed_users } }
+      ]
+    }).select("-password");
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los usuarios" });
+  }
+};
+
+export { addUser, getUserProfile, sendEmailToUser, fetchAllusers };
