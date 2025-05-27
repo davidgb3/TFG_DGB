@@ -8,12 +8,9 @@ import Select from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 
-const InviteUserModal = ({ open, handleClose, projectId }) => {
+const InviteUserModal = ({ open, handleClose, projectId, userList }) => {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const { inviteUserToProject, error } = useProject();
-    const { userList } = useUser();
-
-    const aviableUsers = userList?.filter(user => !user.allowed_users.includes(user.username));
 
     const handleChange = (event) => {
         const {
@@ -91,10 +88,10 @@ const InviteUserModal = ({ open, handleClose, projectId }) => {
                                 fontFamily: 'Nothing',
                             }}
                         >
-                            {aviableUsers?.map((user) => (
+                            {userList?.map((user) => (
                                 <MenuItem 
-                                    key={user._id} 
-                                    value={user.username}
+                                    key={user._id}
+                                    value={user.username}  // Cambiado de user.username a user._id
                                     sx={{
                                         fontFamily: 'Nothing',
                                         color: 'text.primary',
@@ -106,7 +103,7 @@ const InviteUserModal = ({ open, handleClose, projectId }) => {
                                         }
                                     }}
                                 >
-                                    {user.username} ({user.email})
+                                    {user.username}
                                 </MenuItem>
                             ))}
                         </Select>

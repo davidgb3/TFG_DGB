@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Note from "../models/Note.js";
 import Project from "../models/Project.js";
+import User from "../models/User.js";
 
 const createProject = async (req, res) => {
     const { name, description } = req.body;
@@ -23,13 +24,35 @@ const createProject = async (req, res) => {
 
 const getProjects = async (req, res) => {
     try {
-        const projects = await Project.find();
+        // Obtener el usuario actual
+        const currentUser = await User.findById(req.userId);
+        if (!currentUser) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        let projects;
+        
+        // Si es admin, puede ver todos los proyectos
+        if (currentUser.role === 'admin') {
+            projects = await Project.find();
+        } else {
+            // Si no es admin, solo ve los proyectos donde:
+            // 1. Es el creador (userId)
+            // 2. Está en allowed_users
+            projects = await Project.find({
+                $or: [
+                    { userId: req.userId },
+                    { allowed_users: currentUser.username }
+                ]
+            });
+        }
+
         res.status(200).json(projects);
     } catch (error) {
         console.error('Error fetching projects:', error);
         res.status(500).json({ message: "Error fetching projects" });
     }
-}
+};
 
 const getProjectNotes = async (req, res) => {
     const { id } = req.params;
@@ -111,4 +134,43 @@ const editProject = async (req, res) => {
     }
 };
 
-export { createProject, getProjects, getProjectNotes, shareProject, editProject };
+const aviableUsers = async (req, res) => {
+    try {
+        const { projectId } = req.params;
+        const currentUser = req.userId; // ID del usuario actual
+
+        // Verificar si el projectId es válido
+        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+            return res.status(400).json({ message: "ID de proyecto inválido" });
+        }
+
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+
+        // Primero, obtener el username del usuario actual
+        const currentUserDoc = await User.findById(currentUser);
+        if (!currentUserDoc) {
+            return res.status(404).json({ message: "Usuario actual no encontrado" });
+        }
+
+        // Obtener usuarios que:
+        // 1. No están en allowed_users
+        // 2. No son el usuario actual
+        const users = await User.find({
+            $and: [
+                { username: { $nin: project.allowed_users || [] } },
+                { username: { $ne: currentUserDoc.username } }
+            ]
+        }).select('-password');
+
+        console.log('Available users:', users); // Para debugging
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error en aviableUsers:', error);
+        res.status(500).json({ message: "Error fetching available users" });
+    }
+};
+
+export { createProject, getProjects, getProjectNotes, shareProject, editProject, aviableUsers };

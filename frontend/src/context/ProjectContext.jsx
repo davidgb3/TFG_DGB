@@ -12,6 +12,7 @@ export const ProjectProvider = ({children}) => {
     const [projectNotes, setProjectNotes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [project, setProject] = useState(null);
 
     useEffect(() => {
         getProjects();
@@ -136,8 +137,49 @@ export const ProjectProvider = ({children}) => {
         }
     }
 
+     const getAviableUsers = async (projectId) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}projects/available_users/${projectId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.error('Error response:', await response.text());
+                throw new Error('Error fetching available users');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching available users:', error);
+            setError(error.message);
+            return [];
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
-        <ProjectContext.Provider value={{ newProject, projects, loading, setLoading, error, setError, getProjectNotes, projectNotes, inviteUserToProject, editProject }}>
+        <ProjectContext.Provider value={{ 
+            newProject, 
+            projects, 
+            loading, 
+            setLoading, 
+            error, 
+            setError, 
+            getProjectNotes, 
+            projectNotes, 
+            inviteUserToProject, 
+            editProject,
+            project,
+            setProject,
+            getAviableUsers,
+        }}>
             {children}
         </ProjectContext.Provider>
     )

@@ -6,21 +6,20 @@ import { useNavigate } from "react-router-dom";
 import ShareIcon from '@mui/icons-material/Share';
 import { useState } from "react";
 import InviteUserModal from "../components/InviteUserModal";
-import { useUser } from "../context/UserContext";
 import EditIcon from '@mui/icons-material/Edit';
 import EditProject from '../components/EditProject';
 
 const Projects = () => {
 
-    const { projects } = useProject();
+    const { projects, getAviableUsers } = useProject();
     const { user } = useAuth();
-    const { getUserList } = useUser();
     
     const navigate = useNavigate();
 
     const [openInviteModal, setOpenInviteModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [userList, setUserList] = useState([]);
 
     const handleProjectNotes = (projectId) => {
         navigate(`/project/${projectId}`);	
@@ -38,8 +37,14 @@ const Projects = () => {
         setSelectedProject(null);
     };
 
-    const handleGetUserList = (projectId) => {
-        getUserList(projectId);
+    const handleGetUserList = async (projectId) => {
+        try {
+            const users = await getAviableUsers(projectId);
+            setUserList(users);
+            console.log(userList);
+        } catch (error) {
+            console.error('Error getting user list:', error);
+        }
     }
 
     const handleOpenEdit = (e, project) => {
@@ -167,6 +172,7 @@ const Projects = () => {
                     open={openInviteModal}
                     handleClose={handleCloseInviteModal}
                     projectId={selectedProject}
+                    userList={userList}
                 />
             )}
             {selectedProject && (
