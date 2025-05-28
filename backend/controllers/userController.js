@@ -79,23 +79,7 @@ const sendEmailToUser = async (req, res) => {
 
 const fetchAllusers = async (req, res) => {
   try {
-    const { projectId } = req.body; // Obtenemos el projectId desde la query
-
-    // Primero obtenemos el proyecto para ver sus allowed_users
-    const project = await Project.findById(projectId);
-    if (!project) {
-      return res.status(404).json({ message: "Proyecto no encontrado" });
-    }
-
-    // Buscamos usuarios que:
-    // 1. No sean el usuario actual ($ne: req.userId)
-    // 2. No estén en la lista de allowed_users ($nin: project.allowed_users)
-    const users = await User.find({
-      $and: [
-        { _id: { $ne: req.userId } },
-        { _id: { $nin: project.allowed_users } }
-      ]
-    }).select("-password");
+    const users = await User.find().select("-password");
 
     res.status(200).json(users);
   } catch (error) {

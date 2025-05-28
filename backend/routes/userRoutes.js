@@ -11,6 +11,6 @@ router.post("/:id/sendEmail", sendEmailToUser);
 // ✅ Nueva ruta para obtener información del usuario autenticado
 router.get("/me", authMiddleware, getUserProfile);
 
-router.post("/getUsers", authMiddleware, fetchAllusers);
+router.get("/getUsers", authMiddleware, fetchAllusers);
 
 export default router;

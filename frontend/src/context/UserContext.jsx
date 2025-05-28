@@ -10,7 +10,8 @@ export const UserProvider = ({ children }) => {
     const [userList, setUserList] = useState([]);
 
     useEffect(() => {
-        fetchUserData();   
+        fetchUserData(); 
+        getUserList();  
     }, []);
     
     const fetchUserData = async () => {
@@ -78,15 +79,14 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    const getUserList = async (projectId) => {
+    const getUserList = async () => {
         try {
             const response = await fetch(`${VITE_BASE_DB_URL}users/getUsers`, {
-                method: "POST",
+                method: "GET",
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ projectId }),
             });
             if (!response.ok) {
                 setError("Error fetching user list");

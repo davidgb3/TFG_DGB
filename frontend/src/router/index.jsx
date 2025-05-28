@@ -7,6 +7,8 @@ import Register from "../pages/Register";
 import UserProfile from "../pages/UserProfile";
 import Projects from "../pages/Projects";
 import ProjectNotes from "../pages/ProjectNotes";
+import ManageUsers from "../pages/ManageUsers";
+import AdminProtectedRoute from "../components/AdminProtectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +42,11 @@ export const router = createBrowserRouter([
             {
                 path: '/userProfile',
                 element: <ProtectedRoute><UserProfile /></ProtectedRoute>,
+            },
+            {
+                path: '/manageUsers',
+                element: <ProtectedRoute><AdminProtectedRoute> <ManageUsers/> </AdminProtectedRoute></ProtectedRoute>
+                    
             }
         ]
     }

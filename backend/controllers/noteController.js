@@ -58,11 +58,11 @@ const getNotesByUser = async (req, res) => {
                 
                 // Comparar año, mes, día, hora y minutos
                 const isSameDateTime = 
-                    dueDate.getFullYear() === now.getFullYear() &&
-                    dueDate.getMonth() === now.getMonth() &&
-                    dueDate.getDate() === now.getDate() &&
-                    dueDate.getHours() === now.getHours() &&
-                    dueDate.getMinutes() === now.getMinutes();
+                    dueDate.getFullYear() <= now.getFullYear() &&
+                    dueDate.getMonth() <= now.getMonth() &&
+                    dueDate.getDate() <= now.getDate() &&
+                    dueDate.getHours() <= now.getHours() ||
+                    dueDate.getMinutes() <= now.getMinutes();
 
                 if (isSameDateTime) {
                     return await Note.findByIdAndUpdate(
