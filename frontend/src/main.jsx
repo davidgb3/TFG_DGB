@@ -7,17 +7,20 @@ import { CssBaseline } from '@mui/material'
 import { NoteProvider } from './context/NoteContext.jsx'
 import { UserProvider } from './context/UserContext.jsx'
 import { ProjectProvider } from './context/ProjectContext.jsx'
+import { AdminProvider } from './context/AdminContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <UserProvider>
       <AuthProvider>
-        <ProjectProvider>
-          <NoteProvider>
-            <CssBaseline />
-            <App />
-          </NoteProvider>
-        </ProjectProvider>
+        <AdminProvider>
+          <ProjectProvider>
+            <NoteProvider>
+              <CssBaseline />
+              <App />
+            </NoteProvider>
+          </ProjectProvider>
+        </AdminProvider>
       </AuthProvider>
     </UserProvider>
   </StrictMode>,

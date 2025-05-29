@@ -8,6 +8,7 @@ import noteRoutes from "./routes/noteRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import { verifyEmailConfig } from "./config/email.js";
 import setupEmailScheduler from "./cron/emailScheduler.js";
+import adminRoutes from "./routes/adminRoutes.js"; // Asegúrate de importar las rutas de administración
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notes", noteRoutes); // Asegúrate de importar y usar las rutas de notas
 app.use("/api/projects", projectRoutes); // Asegúrate de importar y usar las rutas de proyectos
+app.use("/api/admin", adminRoutes); // Asegúrate de importar y usar las rutas de administración
 
 setupEmailScheduler(); // Configurar el programador de correos electrónicos
 

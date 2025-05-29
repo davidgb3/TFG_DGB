@@ -20,6 +20,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useUser } from '../context/UserContext';
 import { useAuth } from '../context/AuthContext';
+import AdminEditProfileModal from '../components/AdminEditProfileModal';
 
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
@@ -29,10 +30,22 @@ const ManageUsers = () => {
         email: '',
         role: ''
     });
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
     const { editUserData, error, userList } = useUser();
     const { user } = useAuth();
 
     console.log(userList);
+
+    const handleOpenEditModal = (user) => {
+        setSelectedUser(user);
+        setIsEditModalOpen(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setSelectedUser(null);
+        setIsEditModalOpen(false);
+    };
 
     return (
         <Box sx={{ padding: 3 }}>
@@ -41,6 +54,7 @@ const ManageUsers = () => {
                 sx={{ 
                     marginBottom: 3,
                     fontFamily: 'Nothing',
+                    fontSize: '4rem',
                     color: 'text.primary',
                     borderBottom: '2px solid',
                     borderColor: 'accent'
@@ -53,10 +67,10 @@ const ManageUsers = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>Username</TableCell>
-                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>Email</TableCell>
-                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>Role</TableCell>
-                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>Actions</TableCell>
+                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing', fontWeight: "bold" }}>Username</TableCell>
+                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing', fontWeight: "bold" }}>Email</TableCell>
+                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing', fontWeight: "bold" }}>Role</TableCell>
+                            <TableCell sx={{ color: 'text.primary', fontFamily: 'Nothing', fontWeight: "bold" }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -115,39 +129,35 @@ const ManageUsers = () => {
                                         user.role
                                     )}
                                 </TableCell>
-                                <TableCell>
-                                    {editingUser === user._id ? (
-                                        <Box>
-                                            <IconButton 
-                                                sx={{ color: 'success.main' }}
-                                            >
-                                                <SaveIcon />
-                                            </IconButton>
-                                            <IconButton 
-                                                sx={{ color: 'error.main' }}
-                                            >
-                                                <CancelIcon />
-                                            </IconButton>
-                                        </Box>
-                                    ) : (
-                                        <IconButton 
-                                            disabled={user._id === user?._id}
-                                            sx={{ 
-                                                color: user._id === user?._id ? 'grey.500' : 'accent',
-                                                '&:hover': {
-                                                    color: 'accent',
-                                                }
-                                            }}
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                    )}
+                                <TableCell sx={{ textAlign: 'center' }}>
+                                    <EditIcon 
+                                        onClick={() => handleOpenEditModal(user)}
+                                        sx={{
+                                            color: 'text.primary',
+                                            transition: 'all 0.3s ease',
+                                            fontSize: '1.5rem',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                color: 'accent',
+                                                transform: 'scale(1.1)'
+                                            }
+                                        }}
+                                    />
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            {/* Add the modal at the end of the component */}
+            {selectedUser && (
+                <AdminEditProfileModal
+                    isOpen={isEditModalOpen}
+                    onClose={handleCloseEditModal}
+                    user={selectedUser}
+                />
+            )}
         </Box>
     );
 };

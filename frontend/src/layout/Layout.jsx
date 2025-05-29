@@ -8,7 +8,7 @@ const Layout = () => {
     <>
       <NavBar />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: 'primary.dark', margin: '5px', borderRadius: '20px', }}>
-        <Outlet />
+        <Outlet z/>
       </Box>
     </>
   )
