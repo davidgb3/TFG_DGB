@@ -137,7 +137,7 @@ const editProject = async (req, res) => {
 const aviableUsers = async (req, res) => {
     try {
         const { projectId } = req.params;
-        const currentUser = req.userId; // ID del usuario actual
+        const currentUser = req.userId;
 
         // Verificar si el projectId es válido
         if (!mongoose.Types.ObjectId.isValid(projectId)) {
@@ -149,7 +149,7 @@ const aviableUsers = async (req, res) => {
             return res.status(404).json({ message: "Proyecto no encontrado" });
         }
 
-        // Primero, obtener el username del usuario actual
+        // Obtener el username del usuario actual
         const currentUserDoc = await User.findById(currentUser);
         if (!currentUserDoc) {
             return res.status(404).json({ message: "Usuario actual no encontrado" });
@@ -158,14 +158,16 @@ const aviableUsers = async (req, res) => {
         // Obtener usuarios que:
         // 1. No están en allowed_users
         // 2. No son el usuario actual
+        // 3. No son admin
         const users = await User.find({
             $and: [
                 { username: { $nin: project.allowed_users || [] } },
-                { username: { $ne: currentUserDoc.username } }
+                { username: { $ne: currentUserDoc.username } },
+                { role: { $ne: 'admin' } }  // Nueva condición para excluir admins
             ]
         }).select('-password');
 
-        console.log('Available users:', users); // Para debugging
+        console.log('Available users:', users);
         res.status(200).json(users);
     } catch (error) {
         console.error('Error en aviableUsers:', error);
@@ -173,4 +175,41 @@ const aviableUsers = async (req, res) => {
     }
 };
 
-export { createProject, getProjects, getProjectNotes, shareProject, editProject, aviableUsers };
+const changeProjectState = async (req, res) => {
+    const { id } = req.params;
+    const { isActive } = req.body;
+
+    try {
+        const updatedProject = await Project.findByIdAndUpdate(
+            id,
+            { isActive },
+            { new: true }
+        );
+
+        if (!updatedProject) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+
+        res.status(200).json(updatedProject);
+    } catch (error) {
+        console.error('Error updating project state:', error);
+        res.status(500).json({ message: "Error updating project state" });
+    }
+};
+
+const deleteProject = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedProject = await Project.findByIdAndDelete(id);
+        if (!deletedProject) {
+            return res.status(404).json({ message: "Proyecto no encontrado" });
+        }
+        res.status(200).json({ message: "Proyecto eliminado exitosamente" });
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        res.status(500).json({ message: "Error deleting project" });
+    }
+};
+
+export { createProject, getProjects, getProjectNotes, shareProject, editProject, aviableUsers, changeProjectState, deleteProject };

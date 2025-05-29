@@ -64,7 +64,7 @@ const InviteUserModal = ({ open, handleClose, projectId, userList }) => {
                     flexDirection: 'column',
                     gap: 2
                 }}>
-                    <FormControl sx={{
+                    <FormControl variant="outlined" sx={{
                         backgroundColor: 'primary.main',
                         borderRadius: '5px',
                         '& .MuiFilledInput-input': { 

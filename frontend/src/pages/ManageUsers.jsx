@@ -23,7 +23,6 @@ import { useAuth } from '../context/AuthContext';
 import AdminEditProfileModal from '../components/AdminEditProfileModal';
 
 const ManageUsers = () => {
-    const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [editForm, setEditForm] = useState({
         username: '',
@@ -33,7 +32,6 @@ const ManageUsers = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const { editUserData, error, userList } = useUser();
-    const { user } = useAuth();
 
     console.log(userList);
 

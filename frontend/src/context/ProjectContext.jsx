@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
@@ -33,6 +34,9 @@ export const ProjectProvider = ({children}) => {
             if (!response.ok) {
                 return;
             }
+
+            await getProjects();
+
         }catch {
             return;
         }
@@ -162,6 +166,59 @@ export const ProjectProvider = ({children}) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const updateProjectState = async (projectId, isActive) => {
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}projects/update_state/${projectId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ isActive })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Error al actualizar el estado del proyecto');
+            }
+
+            // Actualizar la lista de proyectos
+            await getProjects();
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error en updateProjectState:', error);
+            throw error;
+        }
+    };
+
+    const deleteProject = async (projectId) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${VITE_BASE_DB_URL}projects/delete/${projectId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                setError(error.message || 'Error deleting project');
+                return;
+            }
+
+            // Actualizar la lista de proyectos
+            await getProjects();
+            setError(null);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -179,6 +236,8 @@ export const ProjectProvider = ({children}) => {
             project,
             setProject,
             getAviableUsers,
+            updateProjectState,
+            deleteProject
         }}>
             {children}
         </ProjectContext.Provider>

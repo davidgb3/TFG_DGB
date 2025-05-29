@@ -1,4 +1,4 @@
-import { Box, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, FormControl, OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import { useAdmin } from "../context/AdminContext";
 
@@ -19,7 +19,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        modifyUserData(user.id, formData);
+        modifyUserData(user._id, formData);
         window.location.reload();
     }
 
@@ -98,7 +98,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                         }} 
                     />
 
-                    <FormControl variant="filled" sx={{ width: '100%' }}>
+                    <FormControl variant="outlined" sx={{ width: '100%' }}>
                         <InputLabel 
                             id="role-select-label"
                             sx={{
@@ -115,6 +115,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                             labelId="role-select-label"
                             value={formData.role}
                             onChange={handleChange}
+                            input={<OutlinedInput label="Role" />}
                             name="role"
                             sx={{
                                 backgroundColor: 'primary.main',
@@ -152,23 +153,6 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                                 }}
                             >
                                 Admin
-                            </MenuItem>
-                            <MenuItem 
-                                value="project_manager"
-                                sx={{ 
-                                    fontFamily: 'Nothing',
-                                    '&:hover': {
-                                        backgroundColor: 'primary.light'
-                                    },
-                                    '&.Mui-selected': {
-                                        backgroundColor: 'primary.main',
-                                        '&:hover': {
-                                            backgroundColor: 'primary.light'
-                                        }
-                                    }
-                                }}
-                            >
-                                Project Manager
                             </MenuItem>
                             <MenuItem 
                                 value="user"

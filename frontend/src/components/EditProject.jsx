@@ -126,7 +126,7 @@ const EditProject = ({ project, open, handleClose }) => {
                         }} 
                     />
 
-                    <FormControl sx={{ 
+                    <FormControl variant="outlined" sx={{ 
                         backgroundColor: 'primary.main',
                         borderRadius: '5px',
                         '& .MuiOutlinedInput-root': {

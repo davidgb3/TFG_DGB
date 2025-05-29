@@ -32,6 +32,10 @@ const NavBar = () => {
         navigate('/projects');
    }
 
+   const handleManageUsers = () => {
+        navigate('/manageUsers');
+   }
+
   return (
     <Box
       component="nav" 
@@ -105,7 +109,7 @@ const NavBar = () => {
             display: 'flex', 
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 2
+            gap: user?.role !== 'admin' ? 1 : 0.5,
           }}>
             <Box>
               {mode === 'dark' ? (
@@ -143,14 +147,38 @@ const NavBar = () => {
               />
             </Box>
             <Avatar onClick={ handleProfile } sx={{ bgcolor: 'text.primary', color: 'primary.main', fontFamily: 'Nothing', cursor: 'pointer', 
-            '&:hover': {filter: 'opacity(75%)'}, transition: 'all 0.3s ease-in-out'  }}>{userPfp}</Avatar>
+            '&:hover': {filter: 'opacity(75%)'}, transition: 'all 0.3s ease-in-out', marginRight: "5px" }}>{userPfp}</Avatar>
+            
+            {/* Añadir el botón de Admin si el usuario es admin */}
+            {user?.role === 'admin' && (
+              <Button 
+                onClick={handleManageUsers}
+                variant='contained' 
+                sx={{
+                  backgroundColor: 'crimson',
+                  fontFamily: 'Nothing',
+                  borderRadius: user?.role === 'admin' ? '50px 10px 10px 50px' : '10px',
+                  padding: '9px',
+                  color: 'text.primary',
+                  transition: 'filter 0.3s ease-in-out',
+                  '&:hover': {
+                    fontWeight: 'bold',
+                    color: 'white',
+                    backgroundColor: 'darkred'
+                  }
+                }}
+              >
+                Manage Users
+              </Button>
+            )}
+            
             <Button 
               onClick={handleLogout} 
               variant='contained' 
               sx={{
                 backgroundColor: 'crimson',
                 fontFamily: 'Nothing',
-                borderRadius: '50px',
+                borderRadius: user?.role === 'admin' ? '10px 50px 50px 10px' : '50px',
                 padding: '9px',
                 color: 'text.primary',
                 transition: 'filter 0.3s ease-in-out',
