@@ -1,8 +1,9 @@
-import { Box, Button, Modal, TextareaAutosize, TextField, Typography } from '@mui/material'
+import { Box, Button, Modal, TextareaAutosize, TextField, Typography, useMediaQuery } from '@mui/material'
 import { useState } from 'react'
 import { useProject } from '../context/ProjectContext';
 
 const NewProjectModal = () => {
+    const isMobile = useMediaQuery('(max-width:420px)');
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -45,6 +46,7 @@ const NewProjectModal = () => {
           sx={{
             backgroundColor: 'crimson',
             fontFamily: 'Nothing',
+            fontSize: isMobile ? '0.75rem' : '1rem',
             borderRadius: '10px',
             padding: '9px',
             color: 'text.main',
@@ -60,72 +62,68 @@ const NewProjectModal = () => {
           New Project *
         </Button>
         <Modal open={open} onClose={handleClose}>
-            <Box sx={{ width: '50%', height: 'fit-content', backgroundColor: 'primary.main', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: 2, gap: 2 }}>
-                <h1 className='underline decoration-dotted' style={{ fontFamily: 'Nothing', color: 'white', fontSize: '4rem', fontWeight: 'bold' }}>New Project**</h1>
+            <Box sx={{ 
+                    width: isMobile ? '90%' : '50%', 
+                    height: 'fit-content', 
+                    backgroundColor: 'primary.main', 
+                    borderRadius: '20px', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'start', 
+                    alignItems: 'start', 
+                    position: 'absolute', 
+                    top: '50%', 
+                    left: '50%', 
+                    transform: 'translate(-50%, -50%)', 
+                    padding: isMobile ? 2 : 4, 
+                    gap: 2 
+                }}>
+                <h1 className='underline decoration-dotted' style={{ 
+                        fontFamily: 'Nothing', 
+                        color: 'white', 
+                        fontSize: isMobile ? '2rem' : '4rem', 
+                        fontWeight: 'bold' 
+                    }}>
+                        New Project**
+                    </h1>
                 <Box component="form" method="post" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'start', gap: 2, width:"100%", height:"100%", flexWrap: 'wrap' }}>
                     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width:"100%", height:"100%" }}>
                         <TextField required type="text" value={formData.name} onChange={handleChange} name="name"  placeholder="Name" label="Name" variant="filled" sx={{
                           width: "100%",
                           backgroundColor: 'primary.main',
-                          color: 'text.primary',
                           borderRadius: '5px',
                           '& .MuiFilledInput-input': { 
                             color: 'accent', 
-                            fontFamily: 'Nothing',     
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              borderColor: 'primary.main',
-                            },
-                            '&:hover fieldset': {
-                              borderColor: 'accent',
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: 'accent',
-                            },
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'     
                           },
                           '& .MuiInputLabel-root': {
                             color: 'text.primary',
                             fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem',
                             '&.Mui-focused': {
                               color: 'accent'
                             }
-                          },
-                          '& .MuiOutlinedInput-input': {
-                            color: 'primary.main',
                           }
                         }}/>
 
                         <TextField required multiline minRows={4} maxRows={8} type="text" value={formData.description} onChange={handleChange} name="description"  placeholder="Description" label="Description" variant="filled" sx={{
                           width: "100%",
                           backgroundColor: 'primary.main',
-                          color: 'text.primary',
                           borderRadius: '5px',
                           '& .MuiFilledInput-input': { 
                             color: 'accent', 
-                            fontFamily: 'Nothing',     
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              borderColor: 'primary.main',
-                            },
-                            '&:hover fieldset': {
-                              borderColor: 'accent',
-                            },
-                            '&.Mui-focused fieldset': {
-                              borderColor: 'accent',
-                            },
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'     
                           },
                           '& .MuiInputLabel-root': {
                             color: 'text.primary',
                             fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem',
                             '&.Mui-focused': {
                               color: 'accent'
                             }
                           },
-                          '& .MuiOutlinedInput-input': {
-                            color: 'primary.main',
-                          }
                         }}/>
                     </Box>
                   
@@ -136,6 +134,7 @@ const NewProjectModal = () => {
                       sx={{
                         backgroundColor: isFormValid() ? 'crimson' : 'grey',
                         fontFamily: 'Nothing',
+                        fontSize: isMobile ? '0.875rem' : '1rem',
                         borderRadius: '50px',
                         padding: '9px',
                         color: 'text.main',

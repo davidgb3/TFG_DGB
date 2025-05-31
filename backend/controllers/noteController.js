@@ -1,5 +1,6 @@
 import Note from "../models/Note.js";
 import Project from "../models/Project.js";
+import mongoose from "mongoose";
 
 const createNote = async (req, res) => {
     const { title, content, dueDate, reminderDate, projectId } = req.body;
@@ -58,11 +59,11 @@ const getNotesByUser = async (req, res) => {
                 
                 // Comparar año, mes, día, hora y minutos
                 const isSameDateTime = 
-                    dueDate.getFullYear() <= now.getFullYear() &&
-                    dueDate.getMonth() <= now.getMonth() &&
-                    dueDate.getDate() <= now.getDate() &&
-                    dueDate.getHours() <= now.getHours() ||
-                    dueDate.getMinutes() <= now.getMinutes();
+                    dueDate.getFullYear() >= now.getFullYear() &&
+                    dueDate.getMonth() >= now.getMonth() &&
+                    dueDate.getDate() >= now.getDate() &&
+                    dueDate.getHours() >= now.getHours() ||
+                    dueDate.getMinutes() >= now.getMinutes();
 
                 if (isSameDateTime) {
                     return await Note.findByIdAndUpdate(
@@ -120,6 +121,11 @@ const updateNoteState = async (req, res) => {
     const { isCompleted } = req.body;
     
     try {
+        // Verificar que el ID es válido
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "ID de nota inválido" });
+        }
+
         const updatedNote = await Note.findByIdAndUpdate(
             id,
             { isCompleted },

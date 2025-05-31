@@ -11,7 +11,7 @@ export const NoteProvider = ({children}) => {
 
     useEffect(() => {
         getNotes();
-    }, [notes]);
+    }, []);
 
     const newNote = async(formData) => {
         const { title, content, dueDate, reminderDate, projectId } = {...formData};
@@ -29,6 +29,7 @@ export const NoteProvider = ({children}) => {
                 setError('Error creating note');
                 return;
             }
+            await getNotes(); // Recargar las notas después de crear una nueva
         }catch {
             setError('Error creating note');
             return;
@@ -77,31 +78,35 @@ export const NoteProvider = ({children}) => {
                 return;
             }
     
-            getNotes(); // Recargar las notas después de actualizar
+            await getNotes(); // Recargar las notas después de crear una nueva
         } catch (error) {
             setError(error.message);
         }
     };
 
-    const updateNoteState = async (id, isCompleted) => {
+    const updateNoteState = async (id, completedData) => {
         try {
             const response = await fetch(`${VITE_BASE_DB_URL}notes/updateState/${id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify(isCompleted)
+                body: JSON.stringify({ 
+                    isCompleted: completedData.isCompleted 
+                })
             });
 
             if (!response.ok) {
-                throw new Error('Error updating note state');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error updating note state');
             }
 
-            await getNotes(); // Recargar las notas después de actualizar
+            await getNotes(); 
         } catch (error) {
             console.error('Error in updateNoteState:', error);
             setError(error.message);
+            throw error; // Propagar el error para manejo superior
         }
     };
 

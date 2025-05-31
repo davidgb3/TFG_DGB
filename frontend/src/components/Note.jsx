@@ -1,18 +1,20 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDelete }) => {
+    const isMobile = useMediaQuery('(max-width:420px)');
+
     return (
         <Box 
             component='div' 
             onClick={() => onView(note)}
             sx={{ 
                 width: 'auto', 
-                minWidth: '250px', 
+                minWidth: isMobile ? '200px' : '250px', 
                 maxWidth: '1000px',
                 height: 'fit-content',
                 minHeight: 'fit-content',
@@ -54,7 +56,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                         sx={{
                             color: 'text.primary',
                             transition: 'all 0.3s ease',
-                            fontSize: '2rem',
+                            fontSize: isMobile ? '1.5rem' : '2rem',
                             '&:hover': {
                                 color: 'accent',
                                 transform: 'scale(1.1)'
@@ -67,6 +69,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                     sx={{
                         color: 'text.primary',
                         transition: 'all 0.3s ease',
+                        fontSize: isMobile ? '1.2rem' : '1.5rem',
                         '&:hover': {
                             color: 'accent',
                             transform: 'scale(1.1)'
@@ -79,7 +82,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                         sx={{
                             color: 'text.primary',
                             transition: 'all 0.3s ease',
-                            fontSize: '2rem',
+                            fontSize: isMobile ? '1.5rem' : '2rem',
                             '&:hover': {
                                 color: 'accent',
                                 transform: 'scale(1.1)'
@@ -92,7 +95,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                         sx={{
                             color: 'accent',
                             transition: 'all 0.3s ease',
-                            fontSize: '2rem',
+                            fontSize: isMobile ? '1.5rem' : '2rem',
                             '&:hover': {
                                 color: 'text.primary',
                                 transform: 'scale(1.1)'
@@ -105,7 +108,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                     sx={{
                         color: 'text.primary',
                         transition: 'all 0.3s ease',
-                        fontSize: '2rem',
+                        fontSize: isMobile ? '1.5rem' : '2rem',
                         '&:hover': {
                             color: 'accent',
                             transform: 'scale(1.1)'
@@ -117,7 +120,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                 variant="h2" 
                 sx={{ 
                     fontFamily: 'Nothing',
-                    fontSize: '2.25rem',
+                    fontSize: isMobile ? '1.125rem' : '2.25rem',
                     width: 'auto',
                     maxWidth: 'calc(100% - 100px)', // Espacio para los iconos
                     overflow: 'hidden',
@@ -134,6 +137,7 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
             <Typography 
                 sx={{ 
                     fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.875rem' : '1rem',
                     width: '100%',  
                     minHeight: 'fit-content',
                     wordBreak: 'break-word',
@@ -144,10 +148,18 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                 {note.content}
             </Typography>
             <span className='flex flex-row gap-1 items-center justify-between flex-wrap'>
-                <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                <Typography sx={{ 
+                    color: 'text.primary', 
+                    fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.875rem' : '1rem'
+                }}>
                     Due Date:
                 </Typography>
-                <Typography sx={{ color: 'accent', fontFamily:'Nothing' }}>
+                <Typography sx={{ 
+                    color: 'accent', 
+                    fontFamily:'Nothing',
+                    fontSize: isMobile ? '0.875rem' : '1rem'
+                }}>
                     {new Date(note.dueDate).toLocaleString('es-ES', {
                         year: 'numeric',
                         month: '2-digit',
@@ -159,17 +171,24 @@ const Note = ({ note, onToggleComplete, onEdit, onView, onMarkAsImportant, onDel
                 </Typography>
                 {note?.username ? (
                     <span className='flex flex-row gap-1 items-center'>
-                        <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                        <Typography sx={{ 
+                            color: 'text.primary', 
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'
+                        }}>
                             Created by:
                         </Typography>
-                        <Typography sx={{ color: 'accent', fontFamily: 'Nothing' }}>
+                        <Typography sx={{ 
+                            color: 'accent', 
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'
+                        }}>
                             {note.username}
                         </Typography>
                     </span>
                 ) : (
                     <></>
-                )
-                }
+                )}
             </span>
         </Box>
     );

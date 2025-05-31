@@ -1,12 +1,14 @@
-import { Box, Button, Modal, Typography } from '@mui/material'
+import { Box, Button, Modal, Typography, useMediaQuery } from '@mui/material'
 import React from 'react'
 import { formatDateInCEST } from '../helpers/HourRenderFix.jsx';
 
 const NoteDetailsModal = ({ note, open, handleClose }) => {
+  const isMobile = useMediaQuery('(max-width:420px)');
+
   return (
     <Modal open={open} onClose={handleClose}>
         <Box sx={{ 
-            width: '50%', 
+            width: isMobile ? '90%' : '50%', 
             height: 'fit-content', 
             backgroundColor: 'primary.main', 
             borderRadius: '20px', 
@@ -22,7 +24,7 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
             <Typography variant="h2" sx={{ 
                 color: 'text.primary',
                 fontFamily: 'Nothing',
-                fontSize: '3rem',
+                fontSize: isMobile ? '1.5rem' : '3rem',
                 borderBottom: '2px solid',
                 borderColor: 'accent',
                 paddingBottom: 1
@@ -31,22 +33,30 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
 
                 {note?.username ? (
                     <span className='flex flex-row gap-1 items-center'>
-                        <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                        <Typography sx={{ 
+                            color: 'text.primary', 
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.9rem' : '1rem'
+                        }}>
                             Created by:
                         </Typography>
-                        <Typography sx={{ color: 'accent', fontFamily: 'Nothing' }}>
+                        <Typography sx={{ 
+                            color: 'accent', 
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.9rem' : '1rem'
+                        }}>
                             {note.username}
                         </Typography>
                     </span>
                 ) : (
                     <></>
-                )
-                }
+                )}
             </Typography>
 
             <Typography sx={{ 
                 color: 'text.primary',
                 fontFamily: 'Nothing',
+                fontSize: isMobile ? '0.9rem' : '1rem',
                 width: '100%',  // Cambiado de 100px a 100%
                 minHeight: 'fit-content',
                 display: 'flex',
@@ -64,16 +74,21 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
 
             <Box sx={{ 
                 display: 'flex', 
-                flexDirection: 'row', 
-                gap: 4, 
+                flexDirection: isMobile ? 'column' : 'row',
+                gap: isMobile ? 2 : 4, 
                 marginTop: 2 
             }}>
                 <Typography sx={{ 
                     color: 'text.primary',
                     fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.9rem' : '1rem',
                 }}>
                     Due Date: 
-                    <span style={{ color: '#D71921', marginLeft: '8px' }}>
+                    <span style={{ 
+                        color: '#D71921', 
+                        marginLeft: '8px',
+                        fontSize: isMobile ? '0.9rem' : '1rem'
+                    }}>
                         {new Date(note.dueDate).toLocaleString('es-ES', {
                             year: 'numeric',
                             month: '2-digit',
@@ -87,10 +102,15 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
 
                 <Typography sx={{ 
                     color: 'text.primary',
-                    fontFamily: 'Nothing'
+                    fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.9rem' : '1rem',
                 }}>
                     Reminder Date: 
-                    <span style={{ color: '#D71921', marginLeft: '8px' }}>
+                    <span style={{ 
+                        color: '#D71921', 
+                        marginLeft: '8px',
+                        fontSize: isMobile ? '0.9rem' : '1rem'
+                    }}>
                         {new Date(note.reminderDate).toLocaleString('es-ES', {
                             year: 'numeric',
                             month: '2-digit',
@@ -109,6 +129,7 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 sx={{
                     backgroundColor: 'accent',
                     fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.9rem' : '1rem',
                     borderRadius: '50px',
                     marginTop: 2,
                     '&:hover': {

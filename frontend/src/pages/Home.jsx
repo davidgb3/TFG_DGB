@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNote } from '../context/NoteContext';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import EditNoteModal from '../components/EditNoteModal';
 import NoteDetailsModal from '../components/NoteDetailsModal';
 import Note from '../components/Note';
 import CompletedNote from '../components/CompletedNote';
 import NewNoteModal from '../components/NewNoteModal';
 import DeleteModal from '../components/DeleteModal';
+import PageTransition from '../components/PageTransition.jsx';
 
 const Home = () => {
     const { notes, updateNoteState, getNotes, setAsImportant, deleteNote } = useNote();
@@ -15,6 +16,7 @@ const Home = () => {
     const [openViewModal, setOpenViewModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [noteToDelete, setNoteToDelete] = useState(null);
+    const isMobile = useMediaQuery('(max-width:420px)');
 
     const handleOpenEdit = (e, note) => {
         e.stopPropagation();
@@ -50,16 +52,6 @@ const Home = () => {
         }
     }
 
-    const handledeleteNote = async (e, note) => {
-        e.stopPropagation();
-        try {
-            await deleteNote(note._id);
-            getNotes();
-        } catch (error) {
-            console.error('Error al eliminar nota:', error);
-        }
-    }
-
     const handleOpenDelete = (e, note) => {
         e.stopPropagation();
         setNoteToDelete(note);
@@ -76,12 +68,13 @@ const Home = () => {
     };
 
     return (
-        <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
+        <PageTransition>
+        <div className='flex flex-col items-start justify-start w-full min-h-screen px-4 sm:px-10 py-5'>
             <Typography sx={{ 
                 fontFamily:'nothing',
-                fontSize: '4rem',
+                fontSize: isMobile ? '2rem' : '4rem', // Reducido a la mitad en móvil
                 color: 'text.primary',
-                marginBottom: '20px',
+                marginBottom: isMobile ? '10px' : '20px',
                 textAlign: 'start',
                 borderBottom: '2px solid',
                 borderColor: 'accent',
@@ -91,11 +84,11 @@ const Home = () => {
                 display: 'flex', 
                 flexDirection: 'row', 
                 flexWrap: 'wrap',
-                gap: '20px', 
+                gap: isMobile ? '10px' : '20px', 
                 justifyContent: 'start', 
                 alignItems: 'start', 
                 width: '100%',
-                marginBottom: '40px'
+                marginBottom: isMobile ? '20px' : '40px'
             }} component='section'> 
                 {notes
                     .filter(note => !note.isCompleted)
@@ -124,9 +117,9 @@ const Home = () => {
                 <>
                     <Typography sx={{ 
                         fontFamily:'nothing',
-                        fontSize: '4rem',
+                        fontSize: isMobile ? '2rem' : '4rem', // Reducido a la mitad en móvil
                         color: 'text.primary',
-                        marginBottom: '20px',
+                        marginBottom: isMobile ? '10px' : '20px',
                         textAlign: 'start',
                         borderBottom: '2px solid',
                         borderColor: 'accent',
@@ -136,7 +129,7 @@ const Home = () => {
                         display: 'flex', 
                         flexDirection: 'row', 
                         flexWrap: 'wrap',
-                        gap: '20px', 
+                        gap: isMobile ? '10px' : '20px',
                         justifyContent: 'start', 
                         alignItems: 'start', 
                         width: '100%'
@@ -179,6 +172,7 @@ const Home = () => {
                 />
             )}
         </div>
+        </PageTransition>
     );
 };
 

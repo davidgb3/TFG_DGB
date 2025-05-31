@@ -1,9 +1,9 @@
-import { Box, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, FormControl, OutlinedInput } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, FormControl, OutlinedInput, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { useAdmin } from "../context/AdminContext";
 
 const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
-
+    const isMobile = useMediaQuery('(max-width:420px)');
     const { modifyUserData } = useAdmin();
 
     const [formData, setFormData] = useState({
@@ -29,14 +29,14 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
             onClose={onClose}
         >
             <Box sx={{ 
-                width: '50%',
+                width: isMobile ? '90%' : '50%',
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: 'primary.main',
                 borderRadius: '20px',
-                padding: 4,
+                padding: isMobile ? 2 : 4,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2
@@ -45,7 +45,8 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                     color: 'text.primary',
                     fontFamily: 'Nothing',
                     borderBottom: '2px solid',
-                    borderColor: 'accent'
+                    borderColor: 'accent',
+                    fontSize: isMobile ? '1.5rem' : '2.125rem'
                 }}>
                     Edit Profile
                 </Typography>
@@ -68,11 +69,13 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                             borderRadius: '5px',
                             '& .MuiFilledInput-input': { 
                                 color: 'accent', 
-                                fontFamily: 'Nothing',     
+                                fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'     
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'text.primary',
                                 fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'
                             }
                         }} 
                     />
@@ -89,11 +92,13 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                             borderRadius: '5px',
                             '& .MuiFilledInput-input': { 
                                 color: 'accent', 
-                                fontFamily: 'Nothing',     
+                                fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'     
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'text.primary',
                                 fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'
                             }
                         }} 
                     />
@@ -104,6 +109,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                             sx={{
                                 color: 'text.primary',
                                 fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem',
                                 '&.Mui-focused': {
                                     color: 'accent'
                                 }
@@ -123,6 +129,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                                 '& .MuiSelect-select': { 
                                     color: 'accent',
                                     fontFamily: 'Nothing',
+                                    fontSize: isMobile ? '0.875rem' : '1rem'
                                 },
                                 '& .MuiSelect-icon': {
                                     color: 'text.primary'
@@ -141,6 +148,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                                 value="admin"
                                 sx={{ 
                                     fontFamily: 'Nothing',
+                                    fontSize: isMobile ? '0.875rem' : '1rem',
                                     '&:hover': {
                                         backgroundColor: 'primary.light'
                                     },
@@ -158,6 +166,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                                 value="user"
                                 sx={{ 
                                     fontFamily: 'Nothing',
+                                    fontSize: isMobile ? '0.875rem' : '1rem',
                                     '&:hover': {
                                         backgroundColor: 'primary.light'
                                     },
@@ -181,6 +190,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                         sx={{
                             backgroundColor: 'crimson',
                             fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem',
                             borderRadius: '50px',
                             padding: '9px',
                             color: 'text.main',

@@ -1,4 +1,4 @@
-import { Box, Button, Modal, TextareaAutosize, TextField, Typography } from '@mui/material'
+import { Box, Button, Modal, TextareaAutosize, TextField, Typography, useMediaQuery } from '@mui/material'
 import { useState } from 'react'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -58,6 +58,8 @@ const NewNoteModal = () => {
                formData.reminderDate; 
     };
 
+    const isMobile = useMediaQuery('(max-width:420px)');
+
   return (
     <>
         <Button 
@@ -68,7 +70,8 @@ const NewNoteModal = () => {
             backgroundColor: 'crimson',
             fontFamily: 'Nothing',
             borderRadius: '10px',
-            padding: '9px',
+            padding: isMobile ? '5px' : '9px',
+            fontSize: isMobile ? '0.75rem' : '1rem',
             color: 'text.main',
             transition: 'all 0.3s ease',
             '&:hover': {
@@ -82,8 +85,28 @@ const NewNoteModal = () => {
           New Note *
         </Button>
         <Modal open={open} onClose={handleClose}>
-            <Box sx={{ width: '50%', height: 'fit-content', backgroundColor: 'primary.main', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: 2, gap: 2 }}>
-                <h1 className='underline decoration-dotted' style={{ fontFamily: 'Nothing', color: 'white', fontSize: '4rem', fontWeight: 'bold' }}>New Note**</h1>
+            <Box sx={{ 
+                width: isMobile ? '90%' : '50%', 
+                height: 'fit-content', 
+                backgroundColor: 'primary.main', 
+                borderRadius: '20px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'start', 
+                alignItems: 'start', 
+                position: 'absolute', 
+                top: '50%', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)', 
+                padding: isMobile ? 1 : 2, 
+                gap: isMobile ? 1 : 2 
+            }}>
+                <h1 className='underline decoration-dotted' style={{ 
+                    fontFamily: 'Nothing', 
+                    color: 'white', 
+                    fontSize: isMobile ? '2rem' : '4rem', 
+                    fontWeight: 'bold' 
+                }}>New Note**</h1>
                 <Box component="form" method="post" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'start', gap: 2, width:"100%", height:"100%", flexWrap: 'wrap' }}>
                     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width:"45%", height:"100%" }}>
                         <TextField required type="text" value={formData.title} onChange={handleChange} name="title"  placeholder="Title" label="Title" variant="filled" sx={{
@@ -211,7 +234,8 @@ const NewNoteModal = () => {
                         backgroundColor: isFormValid() ? 'crimson' : 'grey',
                         fontFamily: 'Nothing',
                         borderRadius: '50px',
-                        padding: '9px',
+                        padding: isMobile ? '5px' : '9px',
+                        fontSize: isMobile ? '0.75rem' : '1rem',
                         color: 'text.main',
                         width: '100%',
                         '&:hover': {

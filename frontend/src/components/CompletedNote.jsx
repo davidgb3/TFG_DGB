@@ -1,17 +1,19 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
+    const isMobile = useMediaQuery('(max-width:420px)');
+
     return (
         <Box 
             component='div' 
             onClick={() => onView(note)}
             sx={{ 
                 width: 'auto', 
-                minWidth: '250px', 
+                minWidth: isMobile ? '200px' : '250px', 
                 maxWidth: '100%',
                 position: 'relative',
                 display: 'flex', 
@@ -48,6 +50,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
                     sx={{
                         color: 'text.primary',
                         transition: 'all 0.3s ease',
+                        fontSize: isMobile ? '1.5rem' : '2rem',
                         '&:hover': {
                             color: 'accent',
                             transform: 'scale(1.1)'
@@ -59,6 +62,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
                     sx={{
                         color: 'text.primary',
                         transition: 'all 0.3s ease',
+                        fontSize: isMobile ? '1.2rem' : '1.5rem',
                         '&:hover': {
                             color: 'accent',
                             transform: 'scale(1.1)'
@@ -71,7 +75,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
                     sx={{
                         color: 'text.primary',
                         transition: 'all 0.3s ease',
-                        fontSize: '2rem',
+                        fontSize: isMobile ? '1.5rem' : '2rem',
                         '&:hover': {
                             color: 'accent',
                             transform: 'scale(1.1)'
@@ -83,7 +87,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
                 variant="h2" 
                 sx={{ 
                     fontFamily: 'Nothing',
-                    fontSize: '2.25rem',
+                    fontSize: isMobile ? '1.125rem' : '2.25rem',
                     width: 'auto',
                     maxWidth: 'calc(100% - 40px)', // Espacio para los iconos
                     overflow: 'hidden',
@@ -101,6 +105,7 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
                 sx={{ 
                     color: 'text.primary',
                     fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.875rem' : '1rem',
                     width: '100%',  
                     minHeight: 'fit-content',
                     display: '-webkit-box',
@@ -114,10 +119,18 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
                 {note.content}
             </Typography>
             <span className='flex flex-row gap-1 items-center'>
-                <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                <Typography sx={{ 
+                    color: 'text.primary', 
+                    fontFamily: 'Nothing',
+                    fontSize: isMobile ? '0.875rem' : '1rem'
+                }}>
                     Due Date:
                 </Typography>
-                <Typography sx={{ color: 'accent', fontFamily:'Nothing' }}>
+                <Typography sx={{ 
+                    color: 'accent', 
+                    fontFamily:'Nothing',
+                    fontSize: isMobile ? '0.875rem' : '1rem'
+                }}>
                     {new Date(note.dueDate).toLocaleString('es-ES', {
                         year: 'numeric',
                         month: '2-digit',
@@ -130,17 +143,24 @@ const CompletedNote = ({ note, onRestore, onEdit, onView, onDelete }) => {
 
                 {note?.username ? (
                     <span className='flex flex-row gap-1 items-center'>
-                        <Typography sx={{ color: 'text.primary', fontFamily: 'Nothing' }}>
+                        <Typography sx={{ 
+                            color: 'text.primary', 
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'
+                        }}>
                             Created by:
                         </Typography>
-                        <Typography sx={{ color: 'accent', fontFamily: 'Nothing' }}>
+                        <Typography sx={{ 
+                            color: 'accent', 
+                            fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'
+                        }}>
                             {note.username}
                         </Typography>
                     </span>
                 ) : (
                     <></>
-                )
-                }
+                )}
             </span>
         </Box>
     );

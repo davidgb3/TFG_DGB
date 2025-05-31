@@ -1,4 +1,4 @@
-import { Box, Button, Modal, TextareaAutosize, TextField, Typography } from '@mui/material'
+import { Box, Button, Modal, TextareaAutosize, TextField, Typography, useMediaQuery } from '@mui/material'
 import React, { useState } from 'react'
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -13,6 +13,7 @@ import { es } from 'date-fns/locale';
 
 const EditNoteModal = ({ note, open, handleClose }) => {
     const { updateNote, error } = useNote();
+    const isMobile = useMediaQuery('(max-width:420px)');
 
     const [formData, setFormData] = useState({
         title: note?.title || "",
@@ -56,11 +57,42 @@ const EditNoteModal = ({ note, open, handleClose }) => {
   return (
     <>
         <Modal open={open} onClose={handleClose}>
-            <Box sx={{ width: '50%', height: 'fit-content', backgroundColor: 'primary.main', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: 2, gap: 2 }}>
-                
-                <Box component="form" method="post" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'start', gap: 2, width:"100%", height:"100%", flexWrap: 'wrap' }}>
+            <Box sx={{ 
+                width: isMobile ? '90%' : '50%', 
+                height: 'fit-content', 
+                backgroundColor: 'primary.main', 
+                borderRadius: '20px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'start', 
+                alignItems: 'start', 
+                position: 'absolute', 
+                top: '50%', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)', 
+                padding: isMobile ? 1 : 2, 
+                gap: isMobile ? 1 : 2 
+            }}>
+                <Box component="form" method="post" onSubmit={handleSubmit} sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'row', 
+                    justifyContent: 'center', 
+                    alignItems: 'start', 
+                    gap: isMobile ? 1 : 2, 
+                    width: "100%", 
+                    height: "100%", 
+                    flexWrap: 'wrap' 
+                }}>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width:"100%", height:"fit-content" }}>
+                    <Box sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        justifyContent: 'start', 
+                        alignItems: 'start', 
+                        gap: isMobile ? 1 : 2, 
+                        width: "100%", 
+                        height: "fit-content" 
+                    }}>
                       <TextField required type="text" value={formData.title} onChange={handleChange} name="title"  placeholder="Title" label="Title" variant="filled" sx={{
                           width: "100%",
                           height: "fit-content",
@@ -70,7 +102,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                           '& .MuiFilledInput-input': { 
                             color: 'accent', 
                             fontFamily: 'Nothing',
-                            fontSize: '3rem',     
+                            fontSize: isMobile ? '1.5rem' : '3rem',     
                           },
                           '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -186,7 +218,8 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                         backgroundColor: isFormValid() ? 'crimson' : 'grey',
                         fontFamily: 'Nothing',
                         borderRadius: '50px',
-                        padding: '9px',
+                        padding: isMobile ? '5px' : '9px',
+                        fontSize: isMobile ? '0.75rem' : '1rem',
                         color: 'text.main',
                         width: '100%',
                         '&:hover': {

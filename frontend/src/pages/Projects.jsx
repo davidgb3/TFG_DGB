@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import NewProjectModal from "../components/NewProjectModal";
 import { useProject } from "../context/ProjectContext";
 import { useAuth } from "../context/AuthContext";
@@ -12,9 +12,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ClearIcon from '@mui/icons-material/Clear';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import DeleteProjectModal from '../components/DeleteProjectModal';
+import DoneIcon from '@mui/icons-material/Done';
+import PageTransition from '../components/PageTransition';
 
 const Projects = () => {
-
+    const isMobile = useMediaQuery('(max-width:420px)');
     const { projects, getAviableUsers, updateProjectState, deleteProject } = useProject();
     const { user } = useAuth();
     
@@ -93,294 +95,299 @@ const Projects = () => {
     };
 
     return (
-        <div className='flex flex-col items-start justify-start w-full h-screen pl-10 pr-10 pt-5 pb-5'>
-            {/* Proyectos Activos */}
-            <Typography sx={{ 
-                fontFamily:'nothing',
-                fontSize: '4rem',
-                color: 'text.primary',
-                marginBottom: '20px',
-                textAlign: 'start',
-                borderBottom: '2px solid',
-                borderColor: 'accent',
-            }}>
-                Projects {user?.role === 'admin' && <NewProjectModal/>}
-            </Typography>
-            <Box sx={{ marginBottom: '40px', display: 'flex', flexDirection: "row", flexWrap: 'wrap', gap: 2, justifyContent: 'start' }}>
-                {projects?.filter(project => project.isActive)
-                .map((project) => (
-                    <Box 
-                        onClick={() => handleProjectNotes(project._id)}
-                        key={project._id}
-                        component='div' 
-                        sx={{ 
-                            width: 'auto', 
-                            minWidth: '250px', 
-                            maxWidth: '1000px',
-                            height: 'fit-content',
-                            minHeight: 'fit-content',
-                            position: 'relative',
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            justifyContent: 'center',
-                            alignItems: 'start',
-                            gap: 1, 
-                            padding: 2, 
-                            backgroundColor: 'primary.main', 
-                            borderRadius: '10px',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            '&:hover': {
-                                transform: 'translateY(-5px)',
-                                backgroundColor: 'primary.light',
-                            }
-                        }}
-                    >   
-                        {user?.role === 'admin' && (
-                            <Box sx={{ 
-                                position: 'absolute',
-                                top: '10px',
-                                right: '10px',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: 'fit-content',
+        <PageTransition>
+            <div className='flex flex-col items-start justify-start w-full h-screen px-4 sm:px-10 py-5'>
+                <Typography sx={{ 
+                    fontFamily:'nothing',
+                    fontSize: isMobile ? '2rem' : '4rem',
+                    color: 'text.primary',
+                    marginBottom: '20px',
+                    textAlign: 'start',
+                    borderBottom: '2px solid',
+                    borderColor: 'accent',
+                }}>
+                    Projects {user?.role === 'admin' && <NewProjectModal/>}
+                </Typography>
+                <Box sx={{ marginBottom: '40px', display: 'flex', flexDirection: "row", flexWrap: 'wrap', gap: 2, justifyContent: 'start' }}>
+                    {projects?.filter(project => project.isActive)
+                    .map((project) => (
+                        <Box 
+                            onClick={() => handleProjectNotes(project._id)}
+                            key={project._id}
+                            component='div' 
+                            sx={{ 
+                                width: 'auto', 
+                                minWidth: isMobile ? '200px' : '250px',
+                                maxWidth: '1000px',
                                 height: 'fit-content',
-                                gap: 1
-                            }}>
-                                <EditIcon 
-                                    onClick={(e) => handleOpenEdit(e, project)}
-                                    sx={{
-                                        color: 'text.primary',
-                                        transition: 'all 0.3s ease',
-                                        fontSize: '2rem',
-                                        cursor: 'pointer',
-                                        '&:hover': {
-                                            color: 'accent',
-                                            transform: 'scale(1.1)'
-                                        }
-                                    }}
-                                />
-                                <ShareIcon 
-                                    onClick={(e) => {handleOpenInviteModal(e, project._id)}}
-                                    sx={{
-                                        color: 'text.primary',
-                                        transition: 'all 0.3s ease',
-                                        fontSize: '2rem',
-                                        cursor: 'pointer',
-                                        '&:hover': {
-                                            color: 'accent',
-                                            transform: 'scale(1.1)'
-                                        }
-                                    }}
-                                />
-
-                                <ClearIcon
-                                    onClick={(e) => handleProjectState(e, project._id, false)}
-                                    sx={{
-                                        color: 'text.primary',
-                                        transition: 'all 0.3s ease',
-                                        fontSize: '2.2rem',
-                                        cursor: 'pointer',
-                                        '&:hover': {
-                                            color: 'accent',
-                                            transform: 'scale(1.1)'
-                                        }
-                                    }}
-                                />
-
-                                <DeleteForeverIcon
-                                    onClick={(e) => handleOpenDelete(e, project)}
-                                    sx={{
-                                        color: 'text.primary',
-                                        transition: 'all 0.3s ease',
-                                        fontSize: '2rem',
-                                        cursor: 'pointer',
-                                        '&:hover': {
-                                            color: 'error.main',
-                                            transform: 'scale(1.1)'
-                                        }
-                                    }}/>
-                            </Box>
-                        )}
-                        <Typography variant="h2" 
-                            sx={{ 
-                            fontFamily: 'Nothing',
-                            fontSize: '2.25rem',
-                            width: 'auto',
-                            maxWidth: 'calc(100% - 120px)', // Espacio para los iconos
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            wordBreak: 'break-word',
-                            paddingRight: '50px',
-                            color: 'text.primary',
-                            marginRight: '120px' // Espacio fijo para los iconos
-                        }}>{project.name}</Typography>
-
-                        <Typography variant="h2" 
-                            sx={{ 
-                                fontFamily: 'Nothing',
-                                fontSize: '1rem',
-                                width: 'auto',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                wordBreak: 'break-word',
-                                paddingRight: '50px',
-                                color: 'text.primary',
-                            }}>{project.description}</Typography>
-                    </Box>
-                ))}
-            </Box>
-
-            {/* Proyectos Desactivados */}
-            {projects?.some(project => !project.isActive) && (
-                <>
-                    <Typography sx={{ 
-                        fontFamily:'nothing',
-                        fontSize: '3rem',
-                        color: 'text.primary',
-                        marginBottom: '20px',
-                        textAlign: 'start',
-                        borderBottom: '2px solid',
-                        borderColor: 'error.main',
-                    }}>
-                        Disabled Projects
-                    </Typography>
-                    <Box sx={{ 
-                        opacity: 0.7,
-                        filter: 'grayscale(50%)'
-                    }}>
-                        {projects?.filter(project => !project.isActive)
-                        .map((project) => (
-                            <Box 
-                                key={project._id}
-                                component='div' 
-                                sx={{ 
-                                    width: 'auto', 
-                                    minWidth: '250px', 
-                                    maxWidth: '1000px',
-                                    height: 'fit-content',
-                                    minHeight: 'fit-content',
-                                    position: 'relative',
-                                    display: 'flex', 
-                                    flexDirection: 'column', 
+                                minHeight: 'fit-content',
+                                position: 'relative',
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                justifyContent: 'center',
+                                alignItems: 'start',
+                                gap: 1, 
+                                padding: 2, 
+                                backgroundColor: 'primary.main', 
+                                borderRadius: '10px',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                    transform: 'translateY(-5px)',
+                                    backgroundColor: 'primary.light',
+                                }
+                            }}
+                        >   
+                            {user?.role === 'admin' && (
+                                <Box sx={{ 
+                                    position: 'absolute',
+                                    top: '10px',
+                                    right: '10px',
+                                    display: 'flex',
+                                    flexDirection: 'row',
                                     justifyContent: 'center',
-                                    alignItems: 'start',
-                                    gap: 1, 
-                                    padding: 2, 
-                                    backgroundColor: 'primary.main', 
-                                    borderRadius: '10px',
-                                    marginBottom: '10px',
-                                    cursor: 'default', // Quitar el cursor pointer
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        backgroundColor: 'primary.light',
-                                        transform: 'translateY(-5px)',
-                                    }
+                                    alignItems: 'center',
+                                    width: 'fit-content',
+                                    height: 'fit-content',
+                                    gap: 1
+                                }}>
+                                    <DoneIcon
+                                        onClick={(e) => handleProjectState(e, project._id, false)}
+                                        sx={{
+                                            color: 'text.primary',
+                                            transition: 'all 0.3s ease',
+                                            fontSize: isMobile ? '1.5rem' : '2rem',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                color: 'accent',
+                                                transform: 'scale(1.1)'
+                                            }
+                                        }}
+                                    />
+                                    <EditIcon 
+                                        onClick={(e) => handleOpenEdit(e, project)}
+                                        sx={{
+                                            color: 'text.primary',
+                                            transition: 'all 0.3s ease',
+                                            fontSize: isMobile ? '1.5rem' : '2rem',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                color: 'accent',
+                                                transform: 'scale(1.1)'
+                                            }
+                                        }}
+                                    />
+                                    <ShareIcon 
+                                        onClick={(e) => {handleOpenInviteModal(e, project._id)}}
+                                        sx={{
+                                            color: 'text.primary',
+                                            transition: 'all 0.3s ease',
+                                            fontSize: isMobile ? '1.5rem' : '2rem',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                color: 'accent',
+                                                transform: 'scale(1.1)'
+                                            }
+                                        }}
+                                    />
+                                    <DeleteForeverIcon
+                                        onClick={(e) => handleOpenDelete(e, project)}
+                                        sx={{
+                                            color: 'text.primary',
+                                            transition: 'all 0.3s ease',
+                                            fontSize: isMobile ? '1.5rem' : '2rem',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                color: 'error.main',
+                                                transform: 'scale(1.1)'
+                                            }
+                                        }}/>
+                                </Box>
+                            )}
+                            <Typography variant="h2" 
+                                sx={{ 
+                                    fontFamily: 'Nothing',
+                                    fontSize: isMobile ? '1.125rem' : '2.25rem',
+                                    width: 'auto',
+                                    maxWidth: 'calc(100% - 120px)', // Espacio para los iconos
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    wordBreak: 'break-word',
+                                    paddingRight: '50px',
+                                    color: 'text.primary',
+                                    marginRight: '120px' // Espacio fijo para los iconos
                                 }}
-                            >   
-                                {user?.role === 'admin' && (
-                                    <Box sx={{ 
-                                        position: 'absolute',
-                                        top: '10px',
-                                        right: '10px',
-                                        display: 'flex',
-                                        gap: 1
-                                    }}>
-                                        <RestoreFromTrashIcon
-                                            onClick={(e) => handleProjectState(e, project._id, true)}
-                                            sx={{
-                                                color: 'text.primary',
-                                                transition: 'all 0.3s ease',
-                                                fontSize: '2rem',
-                                                cursor: 'pointer',
-                                                '&:hover': {
-                                                    color: 'accent',
-                                                    transform: 'scale(1.1)'
-                                                }
-                                            }}
-                                        />
+                            >
+                                {project.name}
+                            </Typography>
 
-                                        <DeleteForeverIcon
-                                            onClick={(e) => handleOpenDelete(e, project)}
-                                            sx={{
-                                                color: 'text.primary',
-                                                transition: 'all 0.3s ease',
-                                                fontSize: '2rem',
-                                                cursor: 'pointer',
-                                                '&:hover': {
-                                                    color: 'error.main',
-                                                    transform: 'scale(1.1)'
-                                                }
-                                            }}/>
-                                    </Box>
-                                )}
-                                <Typography variant="h2" 
+                            <Typography variant="h2" 
+                                sx={{ 
+                                    fontFamily: 'Nothing',
+                                    fontSize: isMobile ? '0.875rem' : '1rem',
+                                    width: 'auto',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    wordBreak: 'break-word',
+                                    paddingRight: '50px',
+                                    color: 'text.primary',
+                                }}
+                            >
+                                {project.description}
+                            </Typography>
+                        </Box>
+                    ))}
+                </Box>
+
+                {/* Proyectos Desactivados */}
+                {projects?.some(project => !project.isActive) && (
+                    <>
+                        <Typography sx={{ 
+                            fontFamily:'nothing',
+                            fontSize: isMobile ? '1.5rem' : '3rem',
+                            color: 'text.primary',
+                            marginBottom: '20px',
+                            textAlign: 'start',
+                            borderBottom: '2px solid',
+                            borderColor: 'error.main',
+                        }}>
+                            Disabled Projects
+                        </Typography>
+                        <Box sx={{ 
+                            opacity: 0.7,
+                            filter: 'grayscale(50%)'
+                        }}>
+                            {projects?.filter(project => !project.isActive)
+                            .map((project) => (
+                                <Box 
+                                    key={project._id}
+                                    component='div' 
                                     sx={{ 
-                                        fontFamily: 'Nothing',
-                                        fontSize: '2.25rem',
-                                        width: 'auto',
-                                        maxWidth: 'calc(100% - 80px)',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        wordBreak: 'break-word',
-                                        paddingRight: '50px',
-                                        color: 'text.primary',
-                                        marginRight: '80px'
-                                    }}>
-                                    {project.name}
-                                </Typography>
-                                <Typography variant="h2" 
-                                    sx={{ 
-                                        fontFamily: 'Nothing',
-                                        fontSize: '1rem',
-                                        width: 'auto',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        wordBreak: 'break-word',
-                                        paddingRight: '50px',
-                                        color: 'text.primary',
-                                    }}>
-                                    {project.description}
-                                </Typography>
-                            </Box>
-                        ))}
-                    </Box>
-                </>
-            )}
-            
-            {selectedProject && (
-                <InviteUserModal
-                    open={openInviteModal}
-                    handleClose={handleCloseInviteModal}
-                    projectId={selectedProject}
-                    userList={userList}
-                />
-            )}
-            {selectedProject && (
-                <EditProject
-                    project={selectedProject}
-                    open={openEditModal}
-                    handleClose={handleCloseEdit}
-                />
-            )}
-            {projectToDelete && (
-                <DeleteProjectModal
-                    project={projectToDelete}
-                    open={openDeleteModal}
-                    handleClose={() => {
-                        setOpenDeleteModal(false);
-                        setProjectToDelete(null);
-                    }}
-                    onConfirm={handleConfirmDelete}
-                />
-            )}
-        </div>
+                                        width: 'auto', 
+                                        minWidth: isMobile ? '200px' : '250px',
+                                        maxWidth: '1000px',
+                                        height: 'fit-content',
+                                        minHeight: 'fit-content',
+                                        position: 'relative',
+                                        display: 'flex', 
+                                        flexDirection: 'column', 
+                                        justifyContent: 'center',
+                                        alignItems: 'start',
+                                        gap: 1, 
+                                        padding: 2, 
+                                        backgroundColor: 'primary.main', 
+                                        borderRadius: '10px',
+                                        marginBottom: '10px',
+                                        cursor: 'default', // Quitar el cursor pointer
+                                        transition: 'all 0.3s ease',
+                                        '&:hover': {
+                                            backgroundColor: 'primary.light',
+                                            transform: 'translateY(-5px)',
+                                        }
+                                    }}
+                                >   
+                                    {user?.role === 'admin' && (
+                                        <Box sx={{ 
+                                            position: 'absolute',
+                                            top: '10px',
+                                            right: '10px',
+                                            display: 'flex',
+                                            gap: 1
+                                        }}>
+                                            <RestoreFromTrashIcon
+                                                onClick={(e) => handleProjectState(e, project._id, true)}
+                                                sx={{
+                                                    color: 'text.primary',
+                                                    transition: 'all 0.3s ease',
+                                                    fontSize: isMobile ? '1.5rem' : '2rem',
+                                                    cursor: 'pointer',
+                                                    '&:hover': {
+                                                        color: 'accent',
+                                                        transform: 'scale(1.1)'
+                                                    }
+                                                }}
+                                            />
+
+                                            <DeleteForeverIcon
+                                                onClick={(e) => handleOpenDelete(e, project)}
+                                                sx={{
+                                                    color: 'text.primary',
+                                                    transition: 'all 0.3s ease',
+                                                    fontSize: isMobile ? '1.5rem' : '2rem',
+                                                    cursor: 'pointer',
+                                                    '&:hover': {
+                                                        color: 'error.main',
+                                                        transform: 'scale(1.1)'
+                                                    }
+                                                }}/>
+                                        </Box>
+                                    )}
+                                    <Typography variant="h2" 
+                                        sx={{ 
+                                            fontFamily: 'Nothing',
+                                            fontSize: isMobile ? '1.125rem' : '2.25rem',
+                                            width: 'auto',
+                                            maxWidth: 'calc(100% - 80px)',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            wordBreak: 'break-word',
+                                            paddingRight: '50px',
+                                            color: 'text.primary',
+                                            marginRight: '80px'
+                                        }}>
+                                        {project.name}
+                                    </Typography>
+                                    <Typography variant="h2" 
+                                        sx={{ 
+                                            fontFamily: 'Nothing',
+                                            fontSize: isMobile ? '0.875rem' : '1rem',
+                                            width: 'auto',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            wordBreak: 'break-word',
+                                            paddingRight: '50px',
+                                            color: 'text.primary',
+                                        }}>
+                                        {project.description}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Box>
+                    </>
+                )}
+                
+                {selectedProject && (
+                    <InviteUserModal
+                        open={openInviteModal}
+                        handleClose={handleCloseInviteModal}
+                        projectId={selectedProject}
+                        userList={userList}
+                    />
+                )}
+                {selectedProject && (
+                    <EditProject
+                        project={selectedProject}
+                        open={openEditModal}
+                        handleClose={handleCloseEdit}
+                    />
+                )}
+                {projectToDelete && (
+                    <DeleteProjectModal
+                        project={projectToDelete}
+                        open={openDeleteModal}
+                        handleClose={() => {
+                            setOpenDeleteModal(false);
+                            setProjectToDelete(null);
+                        }}
+                        onConfirm={handleConfirmDelete}
+                    />
+                )}
+            </div>
+        </PageTransition>
     );
 }
 
