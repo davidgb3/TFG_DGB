@@ -108,8 +108,8 @@ const NewNoteModal = () => {
                     fontSize: isMobile ? '2rem' : '4rem', 
                     fontWeight: 'bold' 
                 }}>New Note**</h1>
-                <Box component="form" method="post" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'start', gap: 2, width:"100%", height:"100%", flexWrap: 'wrap' }}>
-                    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width:"45%", height:"100%" }}>
+                <Box component="form" method="post" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center', alignItems: 'start', gap: 2, width:"100%", height:"100%", flexWrap: 'wrap' }}>
+                    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width: isMobile ? '100%' : "45%", height:"100%" }}>
                         <TextField required type="text" value={formData.title} onChange={handleChange} name="title"  placeholder="Title" label="Title" variant="filled" sx={{
                           width: "100%",
                           backgroundColor: 'primary.main',
@@ -175,7 +175,7 @@ const NewNoteModal = () => {
                         }}/>
                     </Box>
 
-                    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width:"45%", height:"100%" }} >
+                    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'start', gap: 2, width: isMobile ? '100%' : "45%", height:"100%" }} >
                         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                           <DateTimePicker 
                             required 

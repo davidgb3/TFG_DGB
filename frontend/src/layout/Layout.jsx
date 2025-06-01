@@ -17,7 +17,7 @@ const Layout = () => {
           flexDirection: 'column', 
           alignItems: 'center', 
           justifyContent: 'center', 
-          height: '100vh', // Altura total menos la altura del NavBar
+          height: 'calc(100vh)', // Altura total menos la altura del NavBar
           backgroundColor: 'primary.dark', 
           margin: '5px', 
           borderRadius: '20px', 

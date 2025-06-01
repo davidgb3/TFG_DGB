@@ -147,7 +147,20 @@ export const getTheme = (mode) => {
             color: isDark ? '#ffffff' : '#1B1B1D'
           }
         }
-      }
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            '&.MuiButton-text': {
+              color: accentColor,
+              '&:hover': {
+                backgroundColor: 'transparent',
+                opacity: 0.8
+              }
+            }
+          }
+        }
+      },
     }
   });
 };

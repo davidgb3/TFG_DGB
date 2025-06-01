@@ -115,7 +115,7 @@ const Home = () => {
                     <Typography sx={{ 
                         color: 'text.primary', 
                         fontFamily: 'Nothing', 
-                        fontSize: isMobile ? '1rem' : '1.5rem',
+                        fontSize: isMobile ? '0.75rem' : '1rem',
                         textAlign: 'left',
                         width: '100%'
                     }}>

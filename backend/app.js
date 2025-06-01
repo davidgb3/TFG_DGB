@@ -9,6 +9,7 @@ import projectRoutes from "./routes/projectRoutes.js";
 import { verifyEmailConfig } from "./config/email.js";
 import setupEmailScheduler from "./cron/emailScheduler.js";
 import adminRoutes from "./routes/adminRoutes.js"; // Asegúrate de importar las rutas de administración
+import createDefaultAdmin from "./helpers/AdminCreation.js";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use(cookieParser());
 
 // Conectar a MongoDB
 connectDB();
+createDefaultAdmin(); // Crear el usuario administrador por defecto
 await verifyEmailConfig(); // Verificar la configuración de correo
 
 // Rutas

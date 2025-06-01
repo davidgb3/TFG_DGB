@@ -263,7 +263,6 @@ const NavBar = () => {
                     fontFamily: 'Nothing',
                     borderRadius: user.role === 'admin' ? '10px 50px 50px 10px' : '50px',
                     padding: '9px',
-                    marginLeft: '10px',
                     color: 'text.primary',
                     '&:hover': {
                       fontWeight: 'bold',
