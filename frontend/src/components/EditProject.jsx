@@ -47,8 +47,6 @@ const EditProject = ({ project, open, handleClose }) => {
         }
     }
 
-    console.log(formData.allowed_users);
-
     return (
         <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 

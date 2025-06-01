@@ -49,7 +49,6 @@ const Projects = () => {
         try {
             const users = await getAviableUsers(projectId);
             setUserList(users);
-            console.log(userList);
         } catch (error) {
             console.error('Error getting user list:', error);
         }
@@ -72,7 +71,6 @@ const Projects = () => {
         try {
             await updateProjectState(projectId, isActive);
             // Opcional: Mostrar un mensaje de éxito
-            console.log(`Proyecto ${isActive ? 'activado' : 'desactivado'} exitosamente`);
         } catch (error) {
             console.error('Error updating project state:', error);
         }

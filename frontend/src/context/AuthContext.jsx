@@ -64,7 +64,6 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('No user data received');
             }
 
-            console.log('User data received:', data.user); // Para debug
             setUser(data.user);
             setIsAuthenticated(true);
             setError(null);

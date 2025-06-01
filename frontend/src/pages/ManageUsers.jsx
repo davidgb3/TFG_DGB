@@ -36,8 +36,6 @@ const ManageUsers = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const { editUserData, error, userList } = useUser();
 
-    console.log(userList);
-
     const handleOpenEditModal = (user) => {
         setSelectedUser(user);
         setIsEditModalOpen(true);

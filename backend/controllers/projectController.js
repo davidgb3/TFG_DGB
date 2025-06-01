@@ -167,7 +167,6 @@ const aviableUsers = async (req, res) => {
             ]
         }).select('-password');
 
-        console.log('Available users:', users);
         res.status(200).json(users);
     } catch (error) {
         console.error('Error en aviableUsers:', error);
