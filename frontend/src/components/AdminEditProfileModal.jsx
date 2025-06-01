@@ -1,6 +1,7 @@
 import { Box, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, FormControl, OutlinedInput, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { useAdmin } from "../context/AdminContext";
+import ModalTransition from './ModalTransitions';
 
 const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
     const isMobile = useMediaQuery('(max-width:420px)');
@@ -23,11 +24,8 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
         window.location.reload();
     }
 
-    return(
-        <Modal 
-            open={isOpen} 
-            onClose={onClose}
-        >
+    return (
+        <ModalTransition isOpen={isOpen} onClose={onClose}>
             <Box sx={{ 
                 width: isMobile ? '90%' : '50%',
                 position: 'absolute',
@@ -205,7 +203,7 @@ const AdminEditProfileModal = ({ isOpen, onClose, user }) => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     );
 };
 

@@ -94,7 +94,7 @@ const NavBar = () => {
         padding: 2,
         color: 'white',
         borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24
+        borderBottomRightRadius: 24,
       }}
     >
       {isAuthenticated ? (
@@ -103,7 +103,7 @@ const NavBar = () => {
             <img 
               onClick={handleHome} 
               className='cursor-pointer' 
-              width={isMobile ? '125px' : '150px'}
+              width={isMobile ? '90px' : '150px'}
               src="../../image2.svg" 
               alt="Nimbus Notes Logo" 
               style={{
@@ -142,6 +142,7 @@ const NavBar = () => {
                 padding: isMobile ? '6px' : '9px',
                 color: 'text.primary',
                 fontSize: isMobile ? '0.6rem' : '1rem',
+                marginRight: isMobile ? '10px' : '0px',
                 '&:hover': {
                   fontWeight: 'bold',
                   color: 'white',
@@ -242,6 +243,7 @@ const NavBar = () => {
                       fontFamily: 'Nothing',
                       borderRadius: '50px 10px 10px 50px',
                       padding: '9px',
+                      marginLeft: '10px',
                       color: 'text.primary',
                       '&:hover': {
                         fontWeight: 'bold',
@@ -259,8 +261,9 @@ const NavBar = () => {
                   sx={{
                     backgroundColor: 'crimson',
                     fontFamily: 'Nothing',
-                    borderRadius: '10px 50px 50px 10px',
+                    borderRadius: user.role === 'admin' ? '10px 50px 50px 10px' : '50px',
                     padding: '9px',
+                    marginLeft: '10px',
                     color: 'text.primary',
                     '&:hover': {
                       fontWeight: 'bold',

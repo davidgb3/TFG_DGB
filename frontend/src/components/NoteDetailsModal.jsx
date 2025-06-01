@@ -1,12 +1,12 @@
 import { Box, Button, Modal, Typography, useMediaQuery } from '@mui/material'
 import React from 'react'
-import { formatDateInCEST } from '../helpers/HourRenderFix.jsx';
+import ModalTransition from './ModalTransitions';
 
 const NoteDetailsModal = ({ note, open, handleClose }) => {
   const isMobile = useMediaQuery('(max-width:420px)');
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <ModalTransition isOpen={open} onClose={handleClose}>
         <Box sx={{ 
             width: isMobile ? '90%' : '50%', 
             height: 'fit-content', 
@@ -141,7 +141,7 @@ const NoteDetailsModal = ({ note, open, handleClose }) => {
                 Close
             </Button>
         </Box>
-    </Modal>
+    </ModalTransition>
   )
 }
 

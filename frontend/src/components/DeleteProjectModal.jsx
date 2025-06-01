@@ -1,10 +1,11 @@
 import { Box, Button, Modal, Typography } from '@mui/material'
 import React from 'react'
+import ModalTransition from './ModalTransitions';
 
 const DeleteProjectModal = ({ project, open, handleClose, onConfirm }) => {
   return (
-    <Modal 
-      open={open} 
+    <ModalTransition
+      isOpen={open} 
       onClose={handleClose}
     >
         <Box sx={{ 
@@ -85,7 +86,7 @@ const DeleteProjectModal = ({ project, open, handleClose, onConfirm }) => {
                 </Button>
             </Box>
         </Box>
-    </Modal>
+    </ModalTransition>
   )
 }
 

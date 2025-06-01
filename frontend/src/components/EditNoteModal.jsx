@@ -10,6 +10,7 @@ import { useNote } from '../context/NoteContext';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { es } from 'date-fns/locale';
+import ModalTransition from './ModalTransitions';
 
 const EditNoteModal = ({ note, open, handleClose }) => {
     const { updateNote, error } = useNote();
@@ -56,7 +57,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
 
   return (
     <>
-        <Modal open={open} onClose={handleClose}>
+        <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 
                 width: isMobile ? '90%' : '50%', 
                 height: 'fit-content', 
@@ -233,7 +234,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     </>
   )
 }

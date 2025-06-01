@@ -7,6 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
+import ModalTransition from './ModalTransitions';
 
 const EditProject = ({ project, open, handleClose }) => {
     const { editProject, error } = useProject();
@@ -49,7 +50,7 @@ const EditProject = ({ project, open, handleClose }) => {
     console.log(formData.allowed_users);
 
     return (
-        <Modal open={open} onClose={handleClose}>
+        <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 
                 width: '50%',
                 position: 'absolute',
@@ -195,7 +196,7 @@ const EditProject = ({ project, open, handleClose }) => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     )
 }
 

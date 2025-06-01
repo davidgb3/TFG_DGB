@@ -1,6 +1,7 @@
 import { Box, Button, Modal, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
+import ModalTransition from './ModalTransitions';
 
 const EditProfileModal = ({ isOpen, onClose, user }) => {
     const isMobile = useMediaQuery('(max-width:420px)');
@@ -24,10 +25,7 @@ const EditProfileModal = ({ isOpen, onClose, user }) => {
     }
 
     return(
-        <Modal 
-            open={isOpen} 
-            onClose={onClose}
-        >
+        <ModalTransition isOpen={isOpen} onClose={onClose}>
             <Box sx={{ 
                 width: isMobile ? '90%' : '50%',
                 position: 'absolute',
@@ -148,7 +146,7 @@ const EditProfileModal = ({ isOpen, onClose, user }) => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     );
 };
 

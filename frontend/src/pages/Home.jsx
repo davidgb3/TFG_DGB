@@ -3,9 +3,9 @@ import { useNote } from '../context/NoteContext';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import EditNoteModal from '../components/EditNoteModal';
 import NoteDetailsModal from '../components/NoteDetailsModal';
-import Note from '../components/Note';
-import CompletedNote from '../components/CompletedNote';
-import NewNoteModal from '../components/NewNoteModal';
+import Note from '../components/Note.jsx';
+import CompletedNote from '../components/CompletedNote.jsx';
+import NewNoteModal from '../components/NewNoteModal.jsx';
 import DeleteModal from '../components/DeleteModal';
 import PageTransition from '../components/PageTransition.jsx';
 
@@ -90,27 +90,38 @@ const Home = () => {
                 width: '100%',
                 marginBottom: isMobile ? '20px' : '40px'
             }} component='section'> 
-                {notes
-                    .filter(note => !note.isCompleted)
-                    .sort((a, b) => {
-                        // Ordenar primero por important (true primero)
-                        if (a.important && !b.important) return -1;
-                        if (!a.important && b.important) return 1;
-                        // Si tienen el mismo important, ordenar por fecha de creación
-                        return new Date(a.dueDate) - new Date(b.dueDate);
-                    })
-                    .map((note) => (
-                        <Note
-                            key={note._id}
-                            note={note}
-                            onToggleComplete={handleToggleComplete}
-                            onEdit={handleOpenEdit}
-                            onView={handleOpenView}
-                            onMarkAsImportant={handlemarkAsImportant}
-                            onDelete={handleOpenDelete}
-                        />
-                    ))
-                }
+                {notes.filter(note => !note.isCompleted).length > 0 ? (
+                    notes
+                        .filter(note => !note.isCompleted)
+                        .sort((a, b) => {
+                            // Ordenar primero por important (true primero)
+                            if (a.important && !b.important) return -1;
+                            if (!a.important && b.important) return 1;
+                            // Si tienen el mismo important, ordenar por fecha de creación
+                            return new Date(a.dueDate) - new Date(b.dueDate);
+                        })
+                        .map((note) => (
+                            <Note
+                                key={note._id}
+                                note={note}
+                                onToggleComplete={handleToggleComplete}
+                                onEdit={handleOpenEdit}
+                                onView={handleOpenView}
+                                onMarkAsImportant={handlemarkAsImportant}
+                                onDelete={handleOpenDelete}
+                            />
+                        ))
+                ) : (
+                    <Typography sx={{ 
+                        color: 'text.primary', 
+                        fontFamily: 'Nothing', 
+                        fontSize: isMobile ? '1rem' : '1.5rem',
+                        textAlign: 'left',
+                        width: '100%'
+                    }}>
+                        You have no notes created.
+                    </Typography>
+                )}
             </Box>
                     
             {notes.filter(note => note.isCompleted).length > 0 && (

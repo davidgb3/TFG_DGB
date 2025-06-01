@@ -8,6 +8,7 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { es } from 'date-fns/locale';
 import { useNote } from '../context/NoteContext';
 import { useParams } from 'react-router-dom';
+import ModalTransition from './ModalTransitions';
 
 const NewNoteModal = () => {
     const [open, setOpen] = useState(false);
@@ -84,7 +85,7 @@ const NewNoteModal = () => {
         >
           New Note *
         </Button>
-        <Modal open={open} onClose={handleClose}>
+        <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 
                 width: isMobile ? '90%' : '50%', 
                 height: 'fit-content', 
@@ -249,7 +250,7 @@ const NewNoteModal = () => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     </>
   )
 }

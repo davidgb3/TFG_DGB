@@ -7,6 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
+import ModalTransition from './ModalTransitions';
 
 const InviteUserModal = ({ open, handleClose, projectId, userList }) => {
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -36,7 +37,7 @@ const InviteUserModal = ({ open, handleClose, projectId, userList }) => {
     };
 
     return (
-        <Modal open={open} onClose={handleClose}>
+        <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 
                 width: '400px',
                 padding: 3,
@@ -128,7 +129,7 @@ const InviteUserModal = ({ open, handleClose, projectId, userList }) => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     );
 };
 

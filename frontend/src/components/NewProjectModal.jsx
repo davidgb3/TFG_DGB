@@ -1,6 +1,7 @@
 import { Box, Button, Modal, TextareaAutosize, TextField, Typography, useMediaQuery } from '@mui/material'
 import { useState } from 'react'
 import { useProject } from '../context/ProjectContext';
+import ModalTransition from './ModalTransitions';
 
 const NewProjectModal = () => {
     const isMobile = useMediaQuery('(max-width:420px)');
@@ -61,7 +62,7 @@ const NewProjectModal = () => {
         >
           New Project *
         </Button>
-        <Modal open={open} onClose={handleClose}>
+        <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 
                     width: isMobile ? '90%' : '50%', 
                     height: 'fit-content', 
@@ -150,7 +151,7 @@ const NewProjectModal = () => {
                     </Button>
                 </Box>
             </Box>
-        </Modal>
+        </ModalTransition>
     </>
   )
 }
