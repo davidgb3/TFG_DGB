@@ -7,24 +7,18 @@ COPY frontend/ .
 RUN npm run build
 
 # Etapa de construcción del backend
-FROM node:18-alpine AS backend-build
-WORKDIR /app/backend
-COPY backend/package*.json ./
-RUN npm install
-COPY backend/ .
-
-# Etapa final
 FROM node:18-alpine
 WORKDIR /app
 
-# Copiar backend
-COPY --from=backend-build /app/backend ./backend
-# Copiar frontend compilado
-COPY --from=frontend-build /app/frontend/dist ./backend/public
-
-# Instalar solo dependencias de producción del backend
+# Copiar y construir el backend
+COPY backend/package*.json ./backend/
 WORKDIR /app/backend
-RUN npm ci --only=production
+RUN npm install --production
+
+COPY backend/ ./
+
+# Copiar el frontend construido
+COPY --from=frontend-build /app/frontend/dist ../frontend/dist
 
 # Variables de entorno
 ENV NODE_ENV=production

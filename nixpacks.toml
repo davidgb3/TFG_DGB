@@ -1,20 +1,20 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'npm']
+nixPkgs = ['nodejs', 'npm', 'bash']
 
 [phases.install]
 cmds = [
-  "cd frontend && npm install",
-  "cd ../backend && npm install"
+    "bash -c 'cd frontend && npm install'",
+    "bash -c 'cd backend && npm install'"
 ]
 
 [phases.build]
 cmds = [
-  "cd frontend && npm run build",
-  "cd ../backend && npm install --only=production"
+    "bash -c 'cd frontend && npm run build'",
+    "bash -c 'cd backend && npm install --only=production'"
 ]
 
 [start]
-cmd = "cd backend && npm start"
+cmd = "bash -c 'cd backend && npm start'"
 
 [env]
 NODE_ENV = "production"
