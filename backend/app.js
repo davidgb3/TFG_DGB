@@ -16,7 +16,7 @@ const app = express();
 // Configuración de CORS (Express maneja CORS, no Nginx)
 const allowedOrigins = [
   "http://localhost:5174",
-  "http://tu-dominio.com",
+  "https://nimbusnotes.up.railway.app",
   "http://localhost:5173",
 ];
 
