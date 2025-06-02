@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
-const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL || 'http://localhost:3000/api/'
+const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);

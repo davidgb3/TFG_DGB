@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
-const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL || 'http://localhost:3000/api/'
+const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL
 
 export const UserProvider = ({ children }) => {
     const [userData, setUserData] = useState([]);

@@ -7,7 +7,7 @@ import { createContext } from "react";
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({children}) => {
-    const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL || 'http://localhost:3000/api/'
+    const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL
 
     const [projects, setProjects] = useState([]);
     const [projectNotes, setProjectNotes] = useState([]);

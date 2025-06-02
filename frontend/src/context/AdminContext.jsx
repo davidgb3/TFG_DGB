@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 
-const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL || 'http://localhost:3000/api/';
+const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL;
 
 const AdminContext = createContext();
 

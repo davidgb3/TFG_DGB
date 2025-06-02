@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 
 const NoteContext = createContext();
-const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL || 'http://localhost:3000/api/'
+const VITE_BASE_DB_URL = import.meta.env.VITE_BASE_DB_URL
 
 export const NoteProvider = ({children}) => {
     const [notes, setNotes] = useState([]);
