@@ -2,16 +2,17 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: true, // Esto permite acceder desde cualquier IP
-    port: 5173
+    host: true,
+    port: 5173,
+    allowedHosts: ['nimbusnotes.up.railway.app', '.railway.app'] // Añadimos los hosts permitidos
   },
   preview: {
-    host: true, // También para el modo preview
-    port: 5173
+    host: true,
+    port: 5173,
+    allowedHosts: ['nimbusnotes.up.railway.app', '.railway.app'] // Añadimos los hosts permitidos
   },
   build: {
     chunkSizeWarningLimit: 1000,
