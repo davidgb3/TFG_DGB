@@ -1,11 +1,2 @@
 # TFG_DGB
 TFG_DGB
-
-# Que poner en el .env del backend
-
-PORT=3000
-MONGODB_URI=mongodb://root:example@mongo:27017/TFG_DGB?authSource=admin
-JWT_SECRET=dgb2005
-FRONTEND_URL=http://localhost
-EMAIL_USER=gbdapps50@gmail.com
-EMAIL_PASSWORD=axwz pzgo fwyb vmvw
