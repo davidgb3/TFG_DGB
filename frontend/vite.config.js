@@ -5,6 +5,14 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    host: true, // Esto permite acceder desde cualquier IP
+    port: 5173
+  },
+  preview: {
+    host: true, // También para el modo preview
+    port: 5173
+  },
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
