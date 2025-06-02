@@ -11,11 +11,21 @@ node_modules/
 /backend/build/
 
 # Environment files
-.env
-.env.local
-.env.development
-.env.production
-.env.test
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development
+/frontend/.env.production
+/frontend/.env.test
+
+/backend/.env
+/backend/.env.local
+/backend/.env.development
+/backend/.env.production
+/backend/.env.test
+
+# No ignorar los archivos de ejemplo
+!/frontend/.env.example
+!/backend/.env.example
 
 # Logs
 logs
