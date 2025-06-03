@@ -1,4 +1,4 @@
-import { Box, Button, Modal, TextField, Typography } from '@mui/material'
+import { Box, Button, Modal, TextField, Typography, useMediaQuery } from '@mui/material'
 import { useState } from 'react'
 import { useProject } from '../context/ProjectContext';
 import { useUser } from '../context/UserContext';
@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ModalTransition from './ModalTransitions';
 
 const EditProject = ({ project, open, handleClose }) => {
+    const isMobile = useMediaQuery('(max-width:420px)');
     const { editProject, error } = useProject();
     const { userList } = useUser();
     
@@ -50,23 +51,24 @@ const EditProject = ({ project, open, handleClose }) => {
     return (
         <ModalTransition isOpen={open} onClose={handleClose}>
             <Box sx={{ 
-                width: '50%',
+                width: isMobile ? '90%' : '50%',
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: 'primary.main',
                 borderRadius: '20px',
-                padding: 4,
+                padding: isMobile ? 2 : 4,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 2
+                gap: isMobile ? 2 : 3
             }}>
                 <Typography variant="h4" sx={{ 
                     color: 'text.primary',
                     fontFamily: 'Nothing',
                     borderBottom: '2px solid',
-                    borderColor: 'accent'
+                    borderColor: 'accent',
+                    fontSize: isMobile ? '1.5rem' : '2.125rem'
                 }}>
                     Edit Project
                 </Typography>
@@ -74,7 +76,7 @@ const EditProject = ({ project, open, handleClose }) => {
                 <Box component="form" onSubmit={handleSubmit} sx={{ 
                     display: 'flex', 
                     flexDirection: 'column', 
-                    gap: 2
+                    gap: isMobile ? 2 : 3
                 }}>
                     <TextField  
                         required
@@ -90,11 +92,13 @@ const EditProject = ({ project, open, handleClose }) => {
                             borderRadius: '5px',
                             '& .MuiFilledInput-input': { 
                                 color: 'accent', 
-                                fontFamily: 'Nothing',     
+                                fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'     
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'text.primary',
                                 fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'
                             }
                         }} 
                     />
@@ -116,11 +120,13 @@ const EditProject = ({ project, open, handleClose }) => {
                             borderRadius: '5px',
                             '& .MuiFilledInput-input': { 
                                 color: 'accent', 
-                                fontFamily: 'Nothing',     
+                                fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'     
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'text.primary',
                                 fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem'
                             }
                         }} 
                     />
@@ -131,10 +137,12 @@ const EditProject = ({ project, open, handleClose }) => {
                         '& .MuiOutlinedInput-root': {
                             color: 'accent',
                             fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'
                         },
                         '& .MuiInputLabel-root': {
                             color: 'text.primary',
                             fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem'
                         }
                     }}>
                         <InputLabel id="allowed-users-label">Allowed Users</InputLabel>
@@ -149,6 +157,7 @@ const EditProject = ({ project, open, handleClose }) => {
                             sx={{
                                 color: 'accent',
                                 fontFamily: 'Nothing',
+                                fontSize: isMobile ? '0.875rem' : '1rem',
                                 '& .MuiSelect-select': {
                                     color: 'accent',
                                 }
@@ -161,6 +170,7 @@ const EditProject = ({ project, open, handleClose }) => {
                                     sx={{
                                         fontFamily: 'Nothing',
                                         color: 'text.primary',
+                                        fontSize: isMobile ? '0.875rem' : '1rem',
                                         '&.Mui-selected': {
                                             backgroundColor: 'primary.light',
                                         },
@@ -182,7 +192,9 @@ const EditProject = ({ project, open, handleClose }) => {
                         sx={{
                             backgroundColor: 'crimson',
                             fontFamily: 'Nothing',
+                            fontSize: isMobile ? '0.875rem' : '1rem',
                             borderRadius: '50px',
+                            padding: isMobile ? '6px' : '9px',
                             color: 'text.main',
                             '&:hover': {
                                 backgroundColor: 'darkred',
