@@ -13,7 +13,7 @@ const login = async (req, res) => {
   // Generar un token JWT
   //Se genera un token JWT que contiene el ID del usuario (userId) y expira en 1 hora.
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "1day", // El token expirará en 1 día
   });
 
   // Enviar el token en una cookie HttpOnly
@@ -29,7 +29,7 @@ const login = async (req, res) => {
   res.cookie("token", token, {
     httpOnly: true, // La cookie solo es accesible por el servidor
     secure: process.env.NODE_ENV === "production", // Solo enviar sobre HTTPS en producción
-    maxAge: 3600000, // Tiempo de expiración (1 hora)
+    maxAge: 24 * 60 * 60 * 1000, // Tiempo de expiración (1 dia)
     sameSite: "strict", // Prevenir ataques CSRF
   });
 
