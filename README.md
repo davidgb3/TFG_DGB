@@ -3,6 +3,116 @@
 ## Descripción
 NimbusNotes es una aplicación web para la gestión de proyectos y notas, permitiendo la colaboración entre usuarios y la organización efectiva de tareas.
 
+## Levantar la Aplicación
+
+### Requisitos Previos
+- Docker y Docker Compose instalados
+- Git instalado
+- Puertos 3000 (backend) y 5173 (frontend) disponibles
+
+### Pasos para Desplegar
+
+1. **Clonar el Repositorio**
+```bash
+git clone https://github.com/davidgb3/TFG_DGB.git
+cd TFG_DGB
+```
+
+2. **Configurar Variables de Entorno**
+
+### Crear los .env en frontend y backend:
+
+Backend (`.env`):
+```env
+PORT=3000
+MONGODB_URI=mongodb://root:example@mongo:27017/TFG_DGB?authSource=admin
+JWT_SECRET=dgb2005
+FRONTEND_URL=http://localhost
+EMAIL_USER=gbdapps50@gmail.com
+EMAIL_PASSWORD=axwz pzgo fwyb vmvw
+```
+
+Frontend (`.env`):
+```env
+VITE_BASE_DB_URL=http://localhost:3000/api/
+```
+
+1. **Levantar con Docker Compose**
+```bash
+docker-compose up --build
+```
+
+1. **Acceder a la Aplicación**
+- Frontend: http://localhost:5173
+- Backend: http://localhost:3000
+
+### Docker Compose
+
+El archivo `docker-compose.yml` incluye:
+- Frontend (React + Vite)
+- Backend (Node.js + Express)
+- MongoDB
+
+```yaml
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BASE_DB_URL=http://localhost:3000/api/
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/nimbusnotes
+      - MONGODB_URI=mongodb://root:example@mongo:27017/TFG_DGB?authSource=admin
+      - JWT_SECRET=dgb2005
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+```
+
+### Notas Importantes
+- Los puertos pueden modificarse en el `docker-compose.yml`
+- Las variables de entorno pueden ajustarse según necesidades
+- MongoDB persiste datos en un volumen Docker
+- El frontend está configurado para desarrollo con hot-reload
+- El backend incluye nodemon para desarrollo
+
+### Desarrollo Local
+
+Para desarrollo sin Docker:
+
+1. **Backend**
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+2. **Frontend**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
 ## Características Principales
 - Gestión de proyectos colaborativos
 - Creación y organización de notas

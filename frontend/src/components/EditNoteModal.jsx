@@ -1,5 +1,5 @@
 import { Box, Button, Modal, TextareaAutosize, TextField, Typography, useMediaQuery } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -53,6 +53,28 @@ const EditNoteModal = ({ note, open, handleClose }) => {
         return formData.title && 
                formData.content && 
                formData.dueDate; // Añadimos dueDate a la validación
+    };
+
+    // Función para obtener la fecha mínima (actual + 5 minutos)
+    const getMinDate = () => {
+        const now = new Date();
+        return new Date(now.getTime() + 5 * 60000);
+    };
+
+    // Función para verificar si una fecha es hoy
+    const isToday = (date) => {
+        if (!date) return false;
+        const today = new Date();
+        const compareDate = new Date(date);
+        
+        return compareDate.getDate() === today.getDate() &&
+              compareDate.getMonth() === today.getMonth() &&
+              compareDate.getFullYear() === today.getFullYear();
+    };
+
+    // Función para obtener la hora mínima
+    const getMinTime = (date) => {
+        return isToday(date) ? getMinDate() : null;
     };
 
   return (
@@ -168,7 +190,7 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                           <DateTimePicker 
                             required 
                             views={['day', 'hours', 'minutes']} 
-                            defaultValue={new Date()} 
+                            defaultValue={getMinDate()} 
                             value={formData.dueDate} 
                             onChange={handleDateChange} 
                             id="dueDate" 
@@ -180,7 +202,8 @@ const EditNoteModal = ({ note, open, handleClose }) => {
                                 required: true,
                               }
                             }} 
-                            minDate={new Date()} 
+                            minDate={getMinDate()}
+                            minTime={getMinTime(formData.dueDate)}
                             sx={{ width: "100%" }}
                             viewRenderers={{
                               hours: renderTimeViewClock,
@@ -192,15 +215,22 @@ const EditNoteModal = ({ note, open, handleClose }) => {
 
                         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                           <DateTimePicker 
+                            required
                             views={['day', 'hours', 'minutes']} 
-                            defaultValue={new Date()} 
+                            defaultValue={getMinDate()} 
                             value={formData.reminderDate} 
                             onChange={handleReminderDateChange} 
                             id="reminderDate" 
                             name="reminderDate" 
                             label="Reminder Date"
                             format="dd/MM/yyyy HH:mm"
-                            minDate={new Date()} 
+                            slotProps={{
+                              textField: {
+                                required: true,
+                              }
+                            }} 
+                            minDate={getMinDate()}
+                            minTime={getMinTime(formData.reminderDate)}
                             sx={{ width: "100%" }}
                             viewRenderers={{
                               hours: renderTimeViewClock,

@@ -24,7 +24,7 @@ services:
       - /app/node_modules
     environment:
       - MONGODB_URI=mongodb://root:example@mongo:27017/TFG_DGB?authSource=admin
-      - JWT_SECRET=tu_clave_secreta_aqui
+      - JWT_SECRET=dgb2005
     depends_on:
       - mongo
 

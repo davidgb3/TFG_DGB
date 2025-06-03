@@ -67,6 +67,27 @@ const NewNoteModal = () => {
 
     const isMobile = useMediaQuery('(max-width:420px)');
 
+    const getMinDate = () => {
+        const now = new Date();
+        return new Date(now.getTime() + 5 * 60000);
+    };
+
+    // Función para verificar si una fecha es hoy
+    const isToday = (date) => {
+    if (!date) return false;
+        const today = new Date();
+        const compareDate = new Date(date);
+        
+        return compareDate.getDate() === today.getDate() &&
+              compareDate.getMonth() === today.getMonth() &&
+              compareDate.getFullYear() === today.getFullYear();
+    };
+
+    // Función para obtener la hora mínima
+    const getMinTime = (date) => {
+        return isToday(date) ? getMinDate() : null;
+    };
+
   return (
     <>
         <Button 
@@ -186,7 +207,7 @@ const NewNoteModal = () => {
                           <DateTimePicker 
                             required 
                             views={['day', 'hours', 'minutes']} 
-                            defaultValue={new Date()} 
+                            defaultValue={getMinDate()} 
                             value={formData.dueDate} 
                             onChange={handleDateChange} 
                             id="dueDate" 
@@ -198,7 +219,8 @@ const NewNoteModal = () => {
                                 required: true,
                               }
                             }} 
-                            minDate={new Date()} 
+                            minDate={getMinDate()} 
+                            minTime={getMinTime(formData.dueDate)}
                             sx={{ width: "100%" }}
                             viewRenderers={{
                               hours: renderTimeViewClock,
@@ -211,7 +233,7 @@ const NewNoteModal = () => {
                           <DateTimePicker 
                             required
                             views={['day', 'hours', 'minutes']} 
-                            defaultValue={new Date()} 
+                            defaultValue={getMinDate()} 
                             value={formData.reminderDate} 
                             onChange={handleReminderDateChange} 
                             id="reminderDate" 
@@ -223,7 +245,8 @@ const NewNoteModal = () => {
                                 required: true,
                               }
                             }} 
-                            minDate={new Date()} 
+                            minDate={getMinDate()} 
+                            minTime={getMinTime(formData.reminderDate)}
                             sx={{ width: "100%" }}
                             viewRenderers={{
                               hours: renderTimeViewClock,
