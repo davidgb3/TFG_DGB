@@ -8,7 +8,7 @@ import PageTransition from '../components/PageTransition';
 
 
 const Register = () => {
-  const { resgister, error, loading } = useAuth();
+  const { resgister, error, loading, isAuthenticated } = useAuth();
   const isMobile = useMediaQuery('(max-width:420px)');
 
   const navigate = useNavigate();
@@ -35,6 +35,11 @@ const Register = () => {
     } catch (error) {
       console.error("Error durante el registro:", error);
     }
+  }
+
+  // Redireccionar si ya está autenticado
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
   }
 
   return (

@@ -7,7 +7,7 @@ import { Box, Button, Typography } from '@mui/material';
 import PageTransition from '../components/PageTransition.jsx';
 
 const Login = () => {
-  const { login, error, loading } = useAuth();
+  const { login, error, loading, isAuthenticated } = useAuth();
 
   const navigate = useNavigate();
 
@@ -19,6 +19,11 @@ const Login = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  }
+
+  // Redireccionar si ya está autenticado
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
   }
 
   const handleSubmit = async (e) => {
