@@ -9,6 +9,7 @@ import { es } from 'date-fns/locale';
 import { useNote } from '../context/NoteContext';
 import { useParams } from 'react-router-dom';
 import ModalTransition from './ModalTransitions';
+import { useProject } from '../context/ProjectContext';
 
 const NewNoteModal = () => {
     const [open, setOpen] = useState(false);
@@ -17,6 +18,7 @@ const NewNoteModal = () => {
     const { newNote, error } = useNote();
 
     const { id } = useParams();
+    const { getProjectNotes } = useProject();
 
     const [formData, setFormData] = useState({
         title: "",
@@ -48,6 +50,10 @@ const NewNoteModal = () => {
           handleClose();
           // window.location.reload();
         }, 500);
+      }
+
+      if(formData.projectId){
+        getProjectNotes(formData.projectId);
       }
     };
 

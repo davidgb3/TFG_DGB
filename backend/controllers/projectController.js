@@ -72,17 +72,45 @@ const getProjectNotes = async (req, res) => {
                 { projectId: new mongoose.Types.ObjectId(id) }
             ]
         })
-        .populate('userId', 'username') // Poblar el campo userId con solo el username
+        .populate('userId', 'username')
         .lean();
 
-        // Transformar el resultado para tener el username en un formato más limpio
-        const notesWithUsername = projectNotes.map(note => ({
-            ...note,
-            username: note.userId.username, // Añadir el username directamente en la raíz
-            userId: note.userId._id // Mantener solo el ID del usuario
+        // Obtener la fecha actual
+        const now = new Date();
+
+        // Actualizar las notas vencidas
+        const updatedNotes = await Promise.all(projectNotes.map(async (note) => {
+            if (note.dueDate && !note.isCompleted) {
+                const dueDate = new Date(note.dueDate);
+                
+                // Comparar si la fecha de vencimiento es menor o igual a la actual
+                const isOverdue = dueDate <= now;
+
+                if (isOverdue) {
+                    const updatedNote = await Note.findByIdAndUpdate(
+                        note._id,
+                        { 
+                            isCompleted: true,
+                            important: true 
+                        },
+                        { new: true }
+                    ).populate('userId', 'username').lean();
+
+                    return {
+                        ...updatedNote,
+                        username: updatedNote.userId.username,
+                        userId: updatedNote.userId._id
+                    };
+                }
+            }
+            return {
+                ...note,
+                username: note.userId.username,
+                userId: note.userId._id
+            };
         }));
 
-        res.status(200).json(notesWithUsername);
+        res.status(200).json(updatedNotes);
     } catch (error) {
         console.error('Error completo:', error);
         res.status(500).json({ 
